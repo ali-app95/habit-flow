@@ -1,0 +1,10 @@
+window.HABIT_FIREBASE_CONFIG={
+ apiKey:"AIzaSyBS9GXvsdS-40Q_HQUR2nqbIpgkvhoo60c",
+ authDomain:"habit-flow-4f442.firebaseapp.com",
+ projectId:"habit-flow-4f442",
+ storageBucket:"habit-flow-4f442.firebasestorage.app",
+ messagingSenderId:"917670174871",
+ appId:"1:917670174871:web:6bea1bf477ca446c97c9d2",
+ measurementId:"G-YQ7QFV5ZK3"
+};
+window.HABIT_VAPID_KEY="BMXHzVWoq6Z_y7mXV3YKg2tZTJxXEnnvvI0HmEd1S1d_fA2kR61sqPtd7QXaGdzpAZhlIj5O-jwWGIh_21LXInw";

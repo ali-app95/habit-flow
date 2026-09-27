@@ -107,6 +107,11 @@
 <div class="modal-actions"><button class="ghost" onclick="closeModal()">Отмена</button><button class="primary" onclick="saveHabit()">Сохранить</button></div>
 </div></div>
 
+<script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-messaging-compat.js"></script>
+<script src="./firebase-config.js"></script>
 <script>
 const KEY="habit-tracker-v2";
 let data=JSON.parse(localStorage.getItem(KEY)||localStorage.getItem("habit-tracker-v1")||'{"habits":[]}');
@@ -186,15 +191,43 @@ function filterCategory(c){
  const list=document.getElementById('habitList');
  list.innerHTML=hs.length?hs.map(h=>`<div class="habit ${done(h)?'done':''}"><div class="icon">${h.icon}</div><div class="info"><div class="name">${esc(h.name)}</div><div class="meta">🔥 ${streak(h)} дней подряд</div><div class="category">${categoryIcon(h.category)} ${esc(h.category)}</div></div><div class="actions"><button class="small edit" onclick="openModal(${h.id})">✎</button><button class="check" onclick="toggle(${h.id})">${done(h)?'✓':'○'}</button></div></div>`).join(''):`<div class="empty">В категории «${esc(c)}» пока нет привычек.</div>`;
 }
-function saveSettings(){data.settings.time=document.getElementById('notifyTime').value;save()}
+async function saveSettings(){
+ data.settings.time=document.getElementById('notifyTime').value;
+ if(data.settings.notifications){try{await syncPushSettings()}catch(e){}}
+ save()
+}
 async function toggleNotifications(){
- if(!data.settings.notifications){
-   if(!('Notification' in window)){alert('Этот браузер не поддерживает уведомления.');return}
-   const permission=await Notification.requestPermission();
-   if(permission!=='granted'){alert('Разрешение на уведомления не выдано.');return}
-   data.settings.notifications=true;
- }else data.settings.notifications=false;
- save();
+ if(data.settings.notifications){data.settings.notifications=false;try{await syncPushSettings()}catch(e){}save();return}
+ if(!('Notification' in window)){alert('Этот браузер не поддерживает уведомления.');return}
+ try{
+  const p=await Notification.requestPermission();if(p!=='granted'){alert('Разрешение на уведомления не выдано.');return}
+  if(!firebase.apps.length)firebase.initializeApp(window.HABIT_FIREBASE_CONFIG);
+  const auth=firebase.auth(),db=firebase.firestore(),msg=firebase.messaging();
+  if(!auth.currentUser)await auth.signInAnonymously();
+  const sw=await navigator.serviceWorker.register('./firebase-messaging-sw.js');
+  const token=await msg.getToken({vapidKey:window.HABIT_VAPID_KEY,serviceWorkerRegistration:sw});
+  if(!token)throw new Error('No FCM token');
+  data.settings.notifications=true;data.settings.fcmToken=token;
+  data.settings.time=data.settings.time||'20:00';
+  data.settings.timezone=Intl.DateTimeFormat().resolvedOptions().timeZone||'UTC';
+  await db.collection('pushSubscriptions').doc(auth.currentUser.uid).set({
+   token,enabled:true,time:data.settings.time,timezone:data.settings.timezone,
+   updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+  },{merge:true});
+  save();alert('Push-уведомления включены. Время: '+data.settings.time);
+ }catch(e){console.error(e);alert('Не удалось подключить push. Включи Anonymous Authentication и Firestore в Firebase.')}
+}
+async function syncPushSettings(){
+ if(!data.settings.fcmToken)return;
+ if(!firebase.apps.length)firebase.initializeApp(window.HABIT_FIREBASE_CONFIG);
+ const auth=firebase.auth(),db=firebase.firestore();
+ if(!auth.currentUser)await auth.signInAnonymously();
+ await db.collection('pushSubscriptions').doc(auth.currentUser.uid).set({
+  token:data.settings.fcmToken,enabled:!!data.settings.notifications,
+  time:data.settings.time||'20:00',
+  timezone:data.settings.timezone||Intl.DateTimeFormat().resolvedOptions().timeZone||'UTC',
+  updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+ },{merge:true});
 }
 function exportData(){
  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
