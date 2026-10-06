@@ -190,7 +190,10 @@
 <h2 id="modalTitle">Новая привычка</h2>
 <div class="field"><label>Название</label><input id="habitName" placeholder="Например, читать 20 минут"></div>
 <div class="field"><label>Иконка</label><select id="habitIcon"><option>💧</option><option>🏃</option><option>📚</option><option>🧘</option><option>💪</option><option>😴</option><option>🍎</option><option>🕌</option><option>💻</option><option>🧹</option></select></div>
-<div class="field"><label>Категория</label><select id="habitCategory"><option value="Здоровье">❤️ Здоровье</option><option value="Спорт">🏃 Спорт</option><option value="Учёба">📚 Учёба</option><option value="Духовное">🕌 Духовное</option><option value="Работа">💻 Работа</option><option value="Личное">✨ Личное</option></select></div>
+<div class="field"><label>Категория</label><select id="habitCategory"><option value="Здоровье">❤️ Здоровье</option><option value="Спорт">🏃 Спорт</option><option value="Учёба">📚 Учёба</option><option value="Духовное">🕌 Духовное</option><option value="Работа">💻 Работа</option><option value="Личное">✨ Личное</option></select></div><div class="field"><label>Расписание</label><select id="habitFrequency" onchange="toggleWeekdays()"><option value="daily">Каждый день</option><option value="weekdays">Будни</option><option value="weekends">Выходные</option><option value="custom">Выбранные дни</option></select></div>
+<div class="field" id="weekdayField" style="display:none"><label>Дни недели</label><div class="weekday-grid">
+<label><input class="weekday" type="checkbox" value="0"><span>Пн</span></label><label><input class="weekday" type="checkbox" value="1"><span>Вт</span></label><label><input class="weekday" type="checkbox" value="2"><span>Ср</span></label><label><input class="weekday" type="checkbox" value="3"><span>Чт</span></label><label><input class="weekday" type="checkbox" value="4"><span>Пт</span></label><label><input class="weekday" type="checkbox" value="5"><span>Сб</span></label><label><input class="weekday" type="checkbox" value="6"><span>Вс</span></label></div></div>
+<div class="field"><label>Напоминание</label><input id="habitReminder" type="time"></div>
 <div class="modal-actions"><button class="ghost" onclick="closeModal()">Отмена</button><button class="primary" onclick="saveHabit()">Сохранить</button></div>
 </div></div>
 
