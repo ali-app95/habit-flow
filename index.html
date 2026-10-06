@@ -21,7 +21,7 @@
 .empty{text-align:center;padding:32px;color:var(--muted);background:var(--card);border:1px dashed #d6d9de;border-radius:18px}
 .week{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}.day{padding:10px 4px;text-align:center;border-radius:14px;background:var(--card);border:1px solid var(--line);cursor:pointer}.day small{display:block;color:var(--muted);font-size:10px}.day b{display:block;font-size:15px;margin:4px 0}.day i{display:block;width:7px;height:7px;border-radius:50%;background:#d9dce0;margin:auto}.day.has i{background:var(--green)}.day.today{border-color:#aaa}
 .calendar{padding:15px}.month-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.month-head button{border:0;background:var(--soft);border-radius:10px;padding:8px 11px;cursor:pointer}.calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.calgrid div{min-height:40px;padding:5px;text-align:center;border-radius:10px;font-size:12px}.calhead{color:var(--muted);font-size:10px!important;min-height:auto!important}.calday{background:var(--soft);cursor:pointer}.calday.done{background:var(--greenbg);color:var(--green);font-weight:700}.calday.selected{outline:2px solid #aaa}
-.analytics{display:grid;grid-template-columns:1fr 1fr;gap:12px}.big{padding:18px}.big b{font-size:34px}.barlist{display:grid;gap:10px;margin-top:14px}.barrow{display:grid;grid-template-columns:70px minmax(0,1fr) 35px;gap:8px;align-items:center;font-size:12px}.barrow .line{height:10px;background:var(--soft);border-radius:20px;overflow:hidden}.barrow .line i{display:block;height:100%;background:var(--accent)}.habit-barrow{grid-template-columns:minmax(125px,1.25fr) minmax(90px,2fr) 38px;font-size:13px}.habit-stat-name{min-width:0;line-height:1.25;overflow-wrap:anywhere}.habit-barrow .line{min-width:0}@media(max-width:560px){.habit-barrow{grid-template-columns:minmax(105px,1.15fr) minmax(80px,2fr) 36px;gap:7px}.habit-stat-name{font-size:12px}}
+.analytics{display:grid;grid-template-columns:1fr 1fr;gap:12px}.big{padding:18px}.big b{font-size:34px}.stats-hero{padding:18px 18px 16px;background:linear-gradient(135deg,#17191c 0%,#332c45 100%);color:#fff;border:0}.stats-hero-top{display:flex;align-items:center;gap:12px}.stats-hero-icon{width:46px;height:46px;border-radius:15px;background:#ffffff18;display:grid;place-items:center;font-size:23px}.stats-hero-title b{display:block;font-size:17px}.stats-hero-title span{display:block;color:#cfd1d5;font-size:12px;margin-top:3px}.stats-hero-main{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:17px}.stats-hero-metric{background:#ffffff12;border:1px solid #ffffff12;border-radius:15px;padding:13px}.stats-hero-metric strong{display:block;font-size:30px;line-height:1}.stats-hero-metric span{display:block;color:#cfd1d5;font-size:11px;margin-top:6px}.stats-section{padding:16px}.stats-section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}.stats-section-head b{font-size:15px}.stats-section-head span{font-size:11px;color:var(--muted)}.barlist{display:grid;gap:11px;margin:0}.barrow{display:grid;grid-template-columns:42px minmax(0,1fr) 42px;gap:9px;align-items:center;font-size:12px}.barrow>span{color:var(--muted);font-weight:600;text-transform:capitalize}.barrow .line{height:10px;background:var(--soft);border-radius:20px;overflow:hidden}.barrow .line i{display:block;height:100%;background:var(--accent);border-radius:20px}.barrow b{text-align:right;font-size:12px}.habit-barrow{grid-template-columns:minmax(110px,1.15fr) minmax(90px,2fr) 38px;font-size:12px}.habit-stat-name{min-width:0;line-height:1.25;overflow-wrap:anywhere}.habit-barrow .line{min-width:0}.stats-empty{padding:18px 4px 3px;color:var(--muted);font-size:12px;text-align:center}@media(max-width:560px){.stats-hero-main{gap:8px}.stats-hero-metric{padding:12px}.stats-hero-metric strong{font-size:27px}.habit-barrow{grid-template-columns:minmax(105px,1.15fr) minmax(75px,2fr) 36px;gap:7px}.habit-stat-name{font-size:12px}}
 .bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);padding:8px max(12px,calc((100vw - 920px)/2));display:flex;justify-content:center;z-index:5}.nav{width:min(520px,100%);display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.nav button{border:0;background:transparent;color:var(--muted);padding:8px;border-radius:12px;font:inherit;cursor:pointer}.nav button.active{background:var(--soft);color:var(--text);font-weight:650}
 .overlay{position:fixed;inset:0;background:#0007;display:none;align-items:flex-end;justify-content:center;padding:14px;z-index:10}.overlay.show{display:flex}.modal{background:#fff;width:min(520px,100%);border-radius:24px;padding:21px}.modal h2{margin:0 0 16px}.field{margin-bottom:13px}.field label{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}.field input,.field select{width:100%;padding:13px;border:1px solid var(--line);border-radius:12px;font:inherit;background:#fff}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}.ghost{border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 14px;font:inherit;cursor:pointer}.danger{color:var(--red)}
 @media(max-width:620px){.app{padding:18px 12px 92px}.top h1{font-size:25px}.stats{gap:7px}.stat{padding:12px}.stat b{font-size:20px}.analytics{grid-template-columns:1fr}.habit{padding:10px}.actions{gap:4px}.actions .small{padding:7px}.actions .edit,.actions .delete{display:inline-flex;align-items:center;justify-content:center}.check{width:40px;height:40px}.meta{font-size:10px}}
@@ -79,13 +79,25 @@
   </section>
 
   <section id="stats" class="view">
-    <div class="title-row"><h2>Статистика</h2><span class="muted">за последние 7 дней</span></div>
-    <div class="analytics">
-      <div class="card big"><span class="muted">Всего выполнено</span><br><b id="sevenTotal">0</b></div>
-      <div class="card big"><span class="muted">Средний прогресс</span><br><b id="sevenAvg">0%</b></div>
+    <div class="title-row"><h2>Статистика</h2><span class="muted">последние 7 дней</span></div>
+    <div class="card stats-hero">
+      <div class="stats-hero-top">
+        <div class="stats-hero-icon">📊</div>
+        <div class="stats-hero-title"><b>Твой прогресс</b><span>Как идут привычки за неделю</span></div>
+      </div>
+      <div class="stats-hero-main">
+        <div class="stats-hero-metric"><strong id="sevenAvg">0%</strong><span>средний прогресс</span></div>
+        <div class="stats-hero-metric"><strong id="sevenTotal">0</strong><span>выполнений</span></div>
+      </div>
     </div>
-    <div class="card" style="padding:17px;margin-top:12px"><b>По дням</b><div id="barlist" class="barlist"></div></div>
-    <div class="card" style="padding:17px;margin-top:12px"><b>По привычкам</b><div id="habitStats" class="barlist"></div></div>
+    <div class="title-row"><h2>По дням</h2><span class="muted">выполнения</span></div>
+    <div class="card stats-section">
+      <div id="barlist" class="barlist"></div>
+    </div>
+    <div class="title-row"><h2>По привычкам</h2><span class="muted">за неделю</span></div>
+    <div class="card stats-section">
+      <div id="habitStats" class="barlist"></div>
+    </div>
   </section>
 
 
@@ -265,10 +277,10 @@ function renderDayDetails(){
  const box=document.getElementById('dayDetails');box.innerHTML=data.habits.length?data.habits.map(h=>`<div class="habit ${done(h,k)?'done':''}"><div class="icon">${h.icon}</div><div class="info"><div class="name">${esc(h.name)}</div></div><button class="check" onclick="toggle(${h.id},'${k}')">${done(h,k)?'✓':'○'}</button></div>`).join(''):'<div class="empty">Добавь привычки, чтобы видеть историю.</div>'
 }
 function renderStats(){
- const hs=data.habits;let days=Array.from({length:7},(_,i)=>{let d=new Date();d.setDate(d.getDate()-(6-i));return d});let vals=days.map(d=>hs.filter(h=>done(h,key(d))).length),max=Math.max(1,...vals),sum=vals.reduce((a,b)=>a+b,0),possible=hs.length*7;
+ const hs=data.habits;let days=Array.from({length:7},(_,i)=>{let d=new Date();d.setDate(d.getDate()-(6-i));return d});let vals=days.map(d=>hs.filter(h=>done(h,key(d))).length),sum=vals.reduce((a,b)=>a+b,0),possible=hs.length*7;
  document.getElementById('sevenTotal').textContent=sum;document.getElementById('sevenAvg').textContent=(possible?Math.round(sum/possible*100):0)+'%';
- document.getElementById('barlist').innerHTML=days.map((d,i)=>`<div class="barrow"><span>${new Intl.DateTimeFormat('ru-RU',{weekday:'short'}).format(d)}</span><div class="line"><i style="width:${vals[i]/max*100}%"></i></div><b>${vals[i]}</b></div>`).join('');
- document.getElementById('habitStats').innerHTML=hs.length?hs.map(h=>{let n=days.filter(d=>done(h,key(d))).length;return `<div class="barrow habit-barrow"><span class="habit-stat-name">${h.icon} ${esc(h.name)}</span><div class="line"><i style="width:${n/7*100}%"></i></div><b>${n}/7</b></div>`}).join(''):'<span class="muted">Пока нет данных</span>'
+ document.getElementById('barlist').innerHTML=days.map((d,i)=>{let pct=hs.length?Math.round(vals[i]/hs.length*100):0;return `<div class="barrow"><span>${new Intl.DateTimeFormat('ru-RU',{weekday:'short'}).format(d)}</span><div class="line"><i style="width:${pct}%"></i></div><b>${vals[i]}/${hs.length}</b></div>`}).join('');
+ document.getElementById('habitStats').innerHTML=hs.length?hs.map(h=>{let n=days.filter(d=>done(h,key(d))).length;return `<div class="barrow habit-barrow"><span class="habit-stat-name">${h.icon} ${esc(h.name)}</span><div class="line"><i style="width:${n/7*100}%"></i></div><b>${n}/7</b></div>`}).join(''):'<div class="stats-empty">Добавь привычки — здесь появится твоя статистика.</div>'
 }
 
 function categoryIcon(c){return ({'Здоровье':'❤️','Спорт':'🏃','Учёба':'📚','Духовное':'🕌','Работа':'💻','Личное':'✨'}[c]||'✨')}
