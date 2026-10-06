@@ -251,7 +251,7 @@ async function handleAuthState(user){
  }catch(e){console.error('Cloud load failed',e);setAccountStatus('Не удалось подключиться к облаку. Проверь правила Firestore и подключение к интернету.')}
  finally{cloudBusy=false}
 }
-function esc(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
 function done(h,k){return !!h.done[k]}
 function streak(h){let d=new Date(),n=0;while(done(h,key(d))){n++;d.setDate(d.getDate()-1)}return n}
 function best(h){let dates=Object.keys(h.done).filter(k=>h.done[k]).sort();let max=0,cur=0,prev=null;for(const x of dates){if(prev){let a=new Date(prev),b=new Date(x);if((b-a)/86400000!==1)cur=0}cur++;max=Math.max(max,cur);prev=x}return max}
