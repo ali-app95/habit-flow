@@ -46,8 +46,11 @@ async function verifyFirebaseIdToken(idToken, env) {
   return data.users[0].localId;
 }
 async function ensureSchema(env) {
-  try { await env.DB.prepare("ALTER TABLE subscriptions ADD COLUMN habits_json TEXT NOT NULL DEFAULT '[]'").run(); } catch {}
-  try { await env.DB.prepare("ALTER TABLE subscriptions ADD COLUMN last_sent_key TEXT").run(); } catch {}
+  try { await env.DB.prepare("SELECT habits_json,last_sent_key FROM subscriptions LIMIT 1").first(); }
+  catch {
+    try { await env.DB.prepare("ALTER TABLE subscriptions ADD COLUMN habits_json TEXT NOT NULL DEFAULT '[]'").run(); } catch {}
+    try { await env.DB.prepare("ALTER TABLE subscriptions ADD COLUMN last_sent_key TEXT").run(); } catch {}
+  }
 }
 function isScheduled(h,dateString) {
   const d=new Date(dateString+"T12:00:00Z"),day=(d.getUTCDay()+6)%7,f=h.frequency||"daily";
