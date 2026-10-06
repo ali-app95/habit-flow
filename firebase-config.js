@@ -8,3 +8,6 @@ window.HABIT_FIREBASE_CONFIG={
  measurementId:"G-YQ7QFV5ZK3"
 };
 window.HABIT_VAPID_KEY="BMXHzVWoq6Z_y7mXV3YKg2tZTJxXEnnvvI0HmEd1S1d_fA2kR61sqPtd7QXaGdzpAZhlIj5O-jwWGIh_21LXInw";
+
+// После публикации Cloudflare Worker замени URL ниже на адрес своего Worker.
+window.HABIT_PUSH_WORKER_URL="https://habit-flow-push.asaev-turpal11.workers.dev";
