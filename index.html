@@ -43,7 +43,7 @@
 .pro-note{text-align:center;font-size:11px;color:var(--muted);margin:9px 0 0}
 .pro-section{padding:16px}.pro-section h3{margin:0 0 8px;font-size:15px}.pro-section p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}
 .pro-link{width:100%;border:1px solid var(--line);background:#fff;border-radius:13px;padding:12px;font:inherit;cursor:pointer;margin-top:10px}
-</style>
+.profile-pro{padding:14px 15px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(135deg,#17191c 0%,#332c45 100%);color:#fff}.profile-pro b{font-size:14px}.profile-pro span{display:block;color:#d8d9dc;font-size:11px;margin-top:3px}.profile-pro button{border:0;border-radius:11px;background:#fff;color:#17191c;padding:9px 12px;font:inherit;font-weight:700;cursor:pointer;white-space:nowrap}</style>
 </head>
 <body>
 <div class="app">
@@ -114,6 +114,10 @@
     <div class="avatar">🔥</div>
     <div><h2 id="profileName">Мой прогресс</h2><p id="profileSubtitle">Начни с одной привычки</p></div>
   </div>
+  <div class="card profile-pro" style="margin-top:12px">
+    <div><b>★ Habit Flow Pro</b><span>Больше возможностей для твоих привычек</span></div>
+    <button onclick="switchView('pro',document.querySelector('[data-view=pro]'))">Открыть</button>
+  </div>
    <div class="title-row"><h2>Облачная синхронизация</h2></div>
    <div class="card" style="margin-bottom:16px">
      <div id="accountStatus" class="muted" style="padding:15px">Войди или создай аккаунт, чтобы хранить прогресс в облаке и открывать его на других устройствах.</div>
@@ -143,7 +147,7 @@
 <button class="active" data-view="home" onclick="switchView('home',this)">⌂<br><small>Сегодня</small></button>
 <button data-view="calendar" onclick="switchView('calendar',this)">▦<br><small>Календарь</small></button>
 <button data-view="stats" onclick="switchView('stats',this)">◔<br><small>Статистика</small></button>
-<button data-view="pro" onclick="switchView('pro',this)">★<br><small>Pro</small></button><button data-view="profile" onclick="switchView('profile',this)">◎<br><small>Профиль</small></button>
+<button data-view="profile" onclick="switchView('profile',this)">◎<br><small>Профиль</small></button>
 </div></nav>
 
 <div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
@@ -236,7 +240,7 @@ function saveHabit(){
 }
 function toggle(id,k=todayKey()){let h=data.habits.find(x=>x.id===id);h.done[k]=!h.done[k];save()}
 function removeHabit(id){if(confirm('Удалить привычку?')){data.habits=data.habits.filter(h=>h.id!==id);save()}}
-function switchView(v,btn){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById(v).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');document.getElementById('pageTitle').textContent=v==='home'?'Сегодня':v==='calendar'?'Календарь':v==='stats'?'Статистика':v==='pro'?'Habit Flow Pro':'Профиль';renderAll()}
+function switchView(v,btn){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById(v).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');document.getElementById('pageTitle').textContent=v==='home'?'Сегодня':v==='calendar'?'Календарь':v==='stats'?'Статистика':v==='pro'?'Habit Flow Pro':'Профиль';renderAll()}
 function renderHome(){
  const hs=data.habits, today=todayKey(), d=hs.filter(h=>done(h,today)).length, total=hs.reduce((s,h)=>s+Object.values(h.done).filter(Boolean).length,0);
  document.getElementById('todayCount').textContent=`${d}/${hs.length}`;document.getElementById('bestStreak').textContent=(Math.max(0,...hs.map(best)))+' 🔥';document.getElementById('totalDone').textContent=total;document.getElementById('dateText').textContent=fmt(new Date());
