@@ -1,0 +1,14 @@
+name = "habit-flow-push"
+main = "src-worker.js"
+compatibility_date = "2026-10-01"
+
+[vars]
+FIREBASE_PROJECT_ID = "habit-flow-4f442"
+
+[triggers]
+crons = ["* * * * *"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "habit-flow-push"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
