@@ -139,6 +139,22 @@ const key=d=>{let x=new Date(d);return new Date(x.getTime()-x.getTimezoneOffset(
 const todayKey=()=>key(new Date());
 const fmt=d=>new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'long'}).format(d);
 let currentUser=null,cloudBusy=false,cloudSaveQueue=Promise.resolve();
+let pushForegroundListenerBound=false;
+function bindForegroundPushListener(){
+ if(pushForegroundListenerBound || !data.settings.notifications || !("Notification" in window)) return;
+ try{
+  if(!firebase.apps.length)firebase.initializeApp(window.HABIT_FIREBASE_CONFIG);
+  firebase.messaging().onMessage(payload=>{
+   const d=payload&&payload.data?payload.data:{};
+   const title=d.title||(payload&&payload.notification&&payload.notification.title)||"Habit Flow";
+   const body=d.body||(payload&&payload.notification&&payload.notification.body)||"Время проверить свои привычки 🔥";
+   if(Notification.permission==="granted"){
+    new Notification(title,{body,icon:"./icon-192.png",tag:"habit-flow-daily",renotify:false});
+   }
+  });
+  pushForegroundListenerBound=true;
+ }catch(e){console.error("Foreground push listener failed",e)}
+}
 function save(){localStorage.setItem(KEY,JSON.stringify(data));renderAll();if(currentUser&&!currentUser.isAnonymous&&!cloudBusy)queueCloudSave()}
 function ensureFirebase(){if(!firebase.apps.length)firebase.initializeApp(window.HABIT_FIREBASE_CONFIG);return firebase.auth()}
 function queueCloudSave(){
@@ -264,6 +280,7 @@ async function toggleNotifications(){
    data.settings.time=data.settings.time||'20:00';
    data.settings.timezone=Intl.DateTimeFormat().resolvedOptions().timeZone||'UTC';
    await syncPushSettings();
+   bindForegroundPushListener();
    save();alert('Push-уведомления включены. Время: '+data.settings.time);
   }catch(e){console.error(e);data.settings.notifications=false;save();alert('Не удалось подключить push. Проверь Firebase Authentication, разрешение уведомлений и настройки Cloudflare Worker. Подробности — в консоли браузера.')}
  }
@@ -300,7 +317,10 @@ function resetAll(){if(confirm('Точно удалить все привычк�
 function renderAll(){renderHome();renderCalendar();renderStats();renderProfile()}
 
 renderAll();
-try{ensureFirebase().onAuthStateChanged(handleAuthState)}catch(e){console.error('Firebase initialization failed',e);setAccountStatus('Не удалось инициализировать Firebase. Проверь firebase-config.js.')}
+try{
+ ensureFirebase().onAuthStateChanged(handleAuthState);
+ if(data.settings.notifications) bindForegroundPushListener();
+}catch(e){console.error('Firebase initialization failed',e);setAccountStatus('Не удалось инициализировать Firebase. Проверь firebase-config.js.')}
 </script>
 </body>
 </html>
