@@ -5,7 +5,6 @@
 <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <link rel="manifest" href="./site.webmanifest">
-<meta name="theme-color" content="#21183f">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#f5f6f8">
@@ -219,7 +218,15 @@ async function loginAccount(create){
  catch(e){console.error(e);const msgs={'auth/email-already-in-use':'Аккаунт с такой почтой уже существует. Нажми «Войти».','auth/invalid-email':'Проверь адрес электронной почты.','auth/weak-password':'Пароль слишком простой — используй минимум 6 символов.','auth/user-not-found':'Аккаунт не найден. Нажми «Создать аккаунт», если регистрируешься впервые.','auth/wrong-password':'Неверная почта или пароль.','auth/invalid-credential':'Неверная почта или пароль.','auth/operation-not-allowed':'В Firebase Console включи Authentication → Sign-in method → Email/Password.'};alert(msgs[e.code]||('Не удалось выполнить вход: '+(e.message||e.code)))}
 }
 async function logoutAccount(){
- try{await ensureFirebase().signOut();setAccountStatus('Выход выполнен. Локальная копия привычек сохранена на этом устройстве.')}catch(e){alert('Не удалось выйти из аккаунта.')}
+ try{
+  if(data.settings.notifications){
+   data.settings.notifications=false;
+   try{await syncPushSettings()}catch(e){console.error('Push disable failed',e)}
+  }
+  save();
+  await ensureFirebase().signOut();
+  setAccountStatus('Выход выполнен. Push-уведомления отключены, локальная копия привычек сохранена.');
+ }catch(e){alert('Не удалось выйти из аккаунта.')}
 }
 async function handleAuthState(user){
  currentUser=user;
@@ -273,7 +280,7 @@ function renderHome(){
  document.getElementById('todayCount').textContent=`${d}/${hs.length}`;document.getElementById('bestStreak').textContent=(Math.max(0,...hs.map(best)))+' 🔥';document.getElementById('totalDone').textContent=total;document.getElementById('weekDone').textContent=weekDone;document.getElementById('dateText').textContent=fmt(new Date());
  let pct=hs.length?Math.round(d/hs.length*100):0;document.getElementById('progressText').textContent=pct+'%';document.getElementById('progressFill').style.width=pct+'%';
  const list=document.getElementById('habitList');
- list.innerHTML=hs.length?hs.map(h=>`<div class="habit ${done(h,today)?'done':''}"><div class="icon">${h.icon}</div><div class="info"><div class="name">${esc(h.name)}</div><div class="meta"><span class="streak">🔥 ${streak(h)}</span><span class="record">дней подряд · рекорд ${best(h)}</span></div><div class="category">${categoryIcon(h.category)} ${esc(h.category||'Личное')}</div></div><div class="actions"><button class="small edit" title="Редактировать" aria-label="Редактировать привычку" onclick="openModal(${h.id})">✎</button><button class="small delete danger" title="Удалить" aria-label="Удалить привычку" onclick="removeHabit(${h.id})">🗑</button><button class="check" aria-label="Отметить выполнение" onclick="toggle(${h.id})">${done(h,today)?'✓':'○'}</button></div></div>`).join(''):'<div class="empty">Пока нет привычек.<br>Добавь первую 🚀</div>';
+ list.innerHTML=hs.length?hs.map(h=>`<div class="habit ${done(h,today)?'done':''}"><div class="icon">${esc(h.icon||'✨')}</div><div class="info"><div class="name">${esc(h.name)}</div><div class="meta"><span class="streak">🔥 ${streak(h)}</span><span class="record">дней подряд · рекорд ${best(h)}</span></div><div class="category">${categoryIcon(h.category)} ${esc(h.category||'Личное')}</div></div><div class="actions"><button class="small edit" title="Редактировать" aria-label="Редактировать привычку" onclick="openModal(${h.id})">✎</button><button class="small delete danger" title="Удалить" aria-label="Удалить привычку" onclick="removeHabit(${h.id})">🗑</button><button class="check" aria-label="Отметить выполнение" onclick="toggle(${h.id})">${done(h,today)?'✓':'○'}</button></div></div>`).join(''):'<div class="empty">Пока нет привычек.<br>Добавь первую 🚀</div>';
  const w=document.getElementById('week');let base=new Date();base.setDate(base.getDate()-((base.getDay()+6)%7));
  w.innerHTML=Array.from({length:7},(_,i)=>{let x=new Date(base);x.setDate(base.getDate()+i);let k=key(x),n=hs.filter(h=>done(h,k)).length;return `<div class="day ${k===today?'today':''} ${n?'has':''}" onclick="goDay('${k}')"><small>${['Пн','Вт','Ср','Чт','Пт','Сб','Вс'][i]}</small><b>${x.getDate()}</b><i title="${n} выполнено"></i></div>`}).join('')
 }
@@ -289,13 +296,13 @@ function renderCalendar(){
 function selectDay(k){selectedDate=new Date(k+'T12:00:00');renderCalendar()}
 function renderDayDetails(){
  const k=key(selectedDate);document.getElementById('selectedDateTitle').textContent=fmt(selectedDate);
- const box=document.getElementById('dayDetails');box.innerHTML=data.habits.length?data.habits.map(h=>`<div class="habit ${done(h,k)?'done':''}"><div class="icon">${h.icon}</div><div class="info"><div class="name">${esc(h.name)}</div></div><button class="check" onclick="toggle(${h.id},'${k}')">${done(h,k)?'✓':'○'}</button></div>`).join(''):'<div class="empty">Добавь привычки, чтобы видеть историю.</div>'
+ const box=document.getElementById('dayDetails');box.innerHTML=data.habits.length?data.habits.map(h=>`<div class="habit ${done(h,k)?'done':''}"><div class="icon">${esc(h.icon||'✨')}</div><div class="info"><div class="name">${esc(h.name)}</div></div><button class="check" onclick="toggle(${h.id},'${k}')">${done(h,k)?'✓':'○'}</button></div>`).join(''):'<div class="empty">Добавь привычки, чтобы видеть историю.</div>'
 }
 function renderStats(){
  const hs=data.habits;let days=Array.from({length:7},(_,i)=>{let d=new Date();d.setDate(d.getDate()-(6-i));return d});let vals=days.map(d=>hs.filter(h=>done(h,key(d))).length),sum=vals.reduce((a,b)=>a+b,0),possible=hs.length*7;
  document.getElementById('sevenTotal').textContent=sum;document.getElementById('sevenAvg').textContent=(possible?Math.round(sum/possible*100):0)+'%';
  document.getElementById('barlist').innerHTML=days.map((d,i)=>{let pct=hs.length?Math.round(vals[i]/hs.length*100):0;return `<div class="barrow"><span>${new Intl.DateTimeFormat('ru-RU',{weekday:'short'}).format(d)}</span><div class="line"><i style="width:${pct}%"></i></div><b>${vals[i]}/${hs.length}</b></div>`}).join('');
- document.getElementById('habitStats').innerHTML=hs.length?hs.map(h=>{let n=days.filter(d=>done(h,key(d))).length;return `<div class="barrow habit-barrow"><span class="habit-stat-name">${h.icon} ${esc(h.name)}</span><div class="line"><i style="width:${n/7*100}%"></i></div><b>${n}/7</b></div>`}).join(''):'<div class="stats-empty">Добавь привычки — здесь появится твоя статистика.</div>'
+ document.getElementById('habitStats').innerHTML=hs.length?hs.map(h=>{let n=days.filter(d=>done(h,key(d))).length;return `<div class="barrow habit-barrow"><span class="habit-stat-name">${esc(h.icon||'✨')} ${esc(h.name)}</span><div class="line"><i style="width:${n/7*100}%"></i></div><b>${n}/7</b></div>`}).join(''):'<div class="stats-empty">Добавь привычки — здесь появится твоя статистика.</div>'
 }
 
 function categoryIcon(c){return ({'Здоровье':'❤️','Спорт':'🏃','Учёба':'📚','Духовное':'🕌','Работа':'💻','Личное':'✨'}[c]||'✨')}
@@ -312,7 +319,7 @@ function filterCategory(c){
  switchView('home',document.querySelector('[data-view=home]'));
  const hs=data.habits.filter(h=>h.category===c);
  const list=document.getElementById('habitList');
- list.innerHTML=hs.length?hs.map(h=>`<div class="habit ${done(h)?'done':''}"><div class="icon">${h.icon}</div><div class="info"><div class="name">${esc(h.name)}</div><div class="meta">🔥 ${streak(h)} дней подряд</div><div class="category">${categoryIcon(h.category)} ${esc(h.category)}</div></div><div class="actions"><button class="small edit" title="Редактировать" aria-label="Редактировать привычку" onclick="openModal(${h.id})">✎</button><button class="small delete danger" title="Удалить" aria-label="Удалить привычку" onclick="removeHabit(${h.id})">🗑</button><button class="check" aria-label="Отметить выполнение" onclick="toggle(${h.id})">${done(h)?'✓':'○'}</button></div></div>`).join(''):`<div class="empty">В категории «${esc(c)}» пока нет привычек.</div>`;
+ list.innerHTML=hs.length?hs.map(h=>`<div class="habit ${done(h)?'done':''}"><div class="icon">${esc(h.icon||'✨')}</div><div class="info"><div class="name">${esc(h.name)}</div><div class="meta">🔥 ${streak(h)} дней подряд</div><div class="category">${categoryIcon(h.category)} ${esc(h.category)}</div></div><div class="actions"><button class="small edit" title="Редактировать" aria-label="Редактировать привычку" onclick="openModal(${h.id})">✎</button><button class="small delete danger" title="Удалить" aria-label="Удалить привычку" onclick="removeHabit(${h.id})">🗑</button><button class="check" aria-label="Отметить выполнение" onclick="toggle(${h.id})">${done(h)?'✓':'○'}</button></div></div>`).join(''):`<div class="empty">В категории «${esc(c)}» пока нет привычек.</div>`;
 }
 async function saveSettings(){
  data.settings.time=document.getElementById('notifyTime').value;
@@ -377,7 +384,15 @@ async function toggleNotifications(){
  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
  a.href=url;a.download='habit-flow-backup.json';a.click();URL.revokeObjectURL(url);
 }
-function resetAll(){if(confirm('Точно удалить все привычки и историю?')){data={habits:[],settings:{notifications:false,time:'20:00'}};save()}}
+async function resetAll(){
+ if(!confirm('Точно удалить все привычки и историю?'))return;
+ const oldSettings=data.settings||{};
+ if(oldSettings.notifications&&oldSettings.fcmToken){
+  try{data.settings.notifications=false;await syncPushSettings()}catch(e){console.error('Push disable failed',e)}
+ }
+ data={habits:[],settings:{notifications:false,time:'20:00'}};
+ save();
+}
 function renderAll(){renderHome();renderCalendar();renderStats();renderProfile()}
 
 renderAll();
