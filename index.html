@@ -14,7 +14,7 @@
 :root{--bg:#f5f6f8;--card:#fff;--text:#17191c;--muted:#7a8088;--line:#e7e9ed;--soft:#f0f1f3;--accent:#17191c;--green:#17804a;--greenbg:#dff6e8;--red:#d94b4b}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 .app{max-width:920px;margin:auto;padding:22px 16px 100px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.eyebrow{font-size:12px;color:var(--muted);margin-bottom:4px}.top h1{font-size:28px;margin:0}.primary{background:var(--accent);color:#fff;border:0;border-radius:13px;padding:11px 15px;font:inherit;cursor:pointer}
-.view{display:none}.view.active{display:block}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}.stat,.card{background:var(--card);border:1px solid var(--line);border-radius:18px}.stat{padding:15px}.stat b{font-size:23px;display:block}.stat span{font-size:12px;color:var(--muted)}
+.view{display:none}.view.active{display:block}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:18px}.stat,.card{background:var(--card);border:1px solid var(--line);border-radius:18px}.stat{padding:15px}.stat b{font-size:23px;display:block}.stat span{font-size:12px;color:var(--muted)}
 .title-row{display:flex;justify-content:space-between;align-items:center;margin:18px 2px 11px}.title-row h2{font-size:18px;margin:0}.muted{font-size:13px;color:var(--muted)}
 .list{display:grid;gap:8px}.habit{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:11px 12px;display:flex;align-items:center;gap:11px;transition:transform .15s,box-shadow .15s,border-color .15s}.habit:has(.check:hover){border-color:#d4d7dc;box-shadow:0 3px 12px #17191c0a}.icon{width:42px;height:42px;border-radius:13px;background:var(--soft);display:grid;place-items:center;font-size:20px;flex:none}.info{flex:1;min-width:0}.name{font-weight:700;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.meta{font-size:11px;color:var(--muted);margin-top:5px;display:flex;align-items:center;gap:5px}.streak{display:inline-flex;align-items:center;gap:3px;padding:3px 7px;border-radius:999px;background:#fff4df;color:#9a6500;font-weight:650}.record{color:var(--muted)}.actions{display:flex;gap:5px;align-items:center}.small{border:0;background:var(--soft);color:var(--muted);border-radius:10px;padding:7px 9px;cursor:pointer}.check{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--soft);font-size:19px;font-weight:700;cursor:pointer;transition:.15s}.check:hover{transform:scale(1.04)}.done .check{background:var(--greenbg);border-color:#c9ecd7;color:var(--green)}.done .name{text-decoration:line-through;color:#7b8188}.done .icon{background:var(--greenbg)}
 .progress{padding:16px;margin-top:15px}.progress-head{display:flex;justify-content:space-between;font-size:13px;margin-bottom:9px}.bar{height:9px;background:#eceef1;border-radius:20px;overflow:hidden}.fill{height:100%;background:var(--accent);border-radius:20px;transition:.25s}
@@ -32,6 +32,17 @@
 .setting{padding:15px;display:flex;justify-content:space-between;align-items:center}.setting+.setting{border-top:1px solid var(--line)}.toggle{width:48px;height:28px;border:0;border-radius:20px;background:#d9dce0;padding:3px;cursor:pointer}.toggle i{display:block;width:22px;height:22px;background:white;border-radius:50%;transition:.2s}.toggle.on{background:#17191c}.toggle.on i{transform:translateX(20px)}
 .account-form{padding:0 15px 15px}.account-form .field{margin-bottom:10px}.account-form input{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;font:inherit;background:#fff}.account-buttons{display:flex;gap:8px;flex-wrap:wrap}.account-buttons button{flex:1;min-width:120px}.account-note{padding:0 15px 15px;font-size:12px;color:var(--muted)}
 @media(max-width:620px){.category-grid{grid-template-columns:1fr 1fr}}
+
+.pro-hero{background:linear-gradient(135deg,#17191c 0%,#332c45 100%);color:#fff;border-radius:22px;padding:22px;margin-bottom:14px;position:relative;overflow:hidden}
+.pro-hero:after{content:"✦";position:absolute;right:-8px;top:-18px;font-size:110px;opacity:.08}
+.pro-badge{display:inline-flex;background:#fff;color:#17191c;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:800;letter-spacing:.04em}
+.pro-hero h2{margin:12px 0 7px;font-size:25px}.pro-hero p{margin:0;color:#d8d9dc;font-size:13px;line-height:1.5}
+.pro-features{display:grid;gap:9px;margin-top:17px}.pro-feature{display:flex;align-items:center;gap:10px;font-size:13px}.pro-feature i{font-style:normal;width:30px;height:30px;border-radius:10px;background:#ffffff14;display:grid;place-items:center}
+.pro-price{display:flex;align-items:baseline;gap:5px;margin:20px 0 13px}.pro-price b{font-size:28px}.pro-price span{font-size:12px;color:#c7c8cc}
+.pro-cta{width:100%;border:0;border-radius:13px;padding:13px;background:#fff;color:#17191c;font:inherit;font-weight:750;cursor:pointer}
+.pro-note{text-align:center;font-size:11px;color:var(--muted);margin:9px 0 0}
+.pro-section{padding:16px}.pro-section h3{margin:0 0 8px;font-size:15px}.pro-section p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}
+.pro-link{width:100%;border:1px solid var(--line);background:#fff;border-radius:13px;padding:12px;font:inherit;cursor:pointer;margin-top:10px}
 </style>
 </head>
 <body>
@@ -77,6 +88,27 @@
     <div class="card" style="padding:17px;margin-top:12px"><b>По привычкам</b><div id="habitStats" class="barlist"></div></div>
   </section>
 
+
+<section id="pro" class="view">
+  <div class="pro-hero">
+    <span class="pro-badge">HABIT FLOW PRO</span>
+    <h2>Больше возможностей для твоих привычек</h2>
+    <p>Сделай трекер удобнее и получай больше от своего прогресса.</p>
+    <div class="pro-features">
+      <div class="pro-feature"><i>🔥</i><span><b>Неограниченные привычки</b></span></div>
+      <div class="pro-feature"><i>📊</i><span><b>Расширенная статистика</b></span></div>
+      <div class="pro-feature"><i>⏰</i><span><b>Несколько напоминаний</b></span></div>
+    </div>
+    <div class="pro-price"><b>$2.99</b><span>в месяц</span></div>
+    <button class="pro-cta" onclick="alert('Оплата Pro будет подключена следующим шагом.')">Попробовать Pro</button>
+    <div class="pro-note">Оплата пока не подключена</div>
+  </div>
+  <div class="card pro-section">
+    <h3>Почему Pro?</h3>
+    <p>Все основные функции Habit Flow остаются доступными бесплатно. Pro добавит расширенные возможности, когда мы подключим оплату.</p>
+  </div>
+</section>
+
 <section id="profile" class="view">
   <div class="card profile-card">
     <div class="avatar">🔥</div>
@@ -111,7 +143,7 @@
 <button class="active" data-view="home" onclick="switchView('home',this)">⌂<br><small>Сегодня</small></button>
 <button data-view="calendar" onclick="switchView('calendar',this)">▦<br><small>Календарь</small></button>
 <button data-view="stats" onclick="switchView('stats',this)">◔<br><small>Статистика</small></button>
-<button data-view="profile" onclick="switchView('profile',this)">◎<br><small>Профиль</small></button>
+<button data-view="pro" onclick="switchView('pro',this)">★<br><small>Pro</small></button><button data-view="profile" onclick="switchView('profile',this)">◎<br><small>Профиль</small></button>
 </div></nav>
 
 <div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
@@ -204,7 +236,7 @@ function saveHabit(){
 }
 function toggle(id,k=todayKey()){let h=data.habits.find(x=>x.id===id);h.done[k]=!h.done[k];save()}
 function removeHabit(id){if(confirm('Удалить привычку?')){data.habits=data.habits.filter(h=>h.id!==id);save()}}
-function switchView(v,btn){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById(v).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');document.getElementById('pageTitle').textContent=v==='home'?'Сегодня':v==='calendar'?'Календарь':v==='stats'?'Статистика':'Профиль';renderAll()}
+function switchView(v,btn){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById(v).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');document.getElementById('pageTitle').textContent=v==='home'?'Сегодня':v==='calendar'?'Календарь':v==='stats'?'Статистика':v==='pro'?'Habit Flow Pro':'Профиль';renderAll()}
 function renderHome(){
  const hs=data.habits, today=todayKey(), d=hs.filter(h=>done(h,today)).length, total=hs.reduce((s,h)=>s+Object.values(h.done).filter(Boolean).length,0);
  document.getElementById('todayCount').textContent=`${d}/${hs.length}`;document.getElementById('bestStreak').textContent=(Math.max(0,...hs.map(best)))+' 🔥';document.getElementById('totalDone').textContent=total;document.getElementById('dateText').textContent=fmt(new Date());
