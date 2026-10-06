@@ -5,6 +5,8 @@ CREATE TABLE IF NOT EXISTS subscriptions (
   time TEXT NOT NULL DEFAULT '20:00',
   timezone TEXT NOT NULL DEFAULT 'UTC',
   last_sent_date TEXT,
+  last_sent_key TEXT,
+  habits_json TEXT NOT NULL DEFAULT '[]',
   updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX IF NOT EXISTS idx_subscriptions_enabled ON subscriptions(enabled);
