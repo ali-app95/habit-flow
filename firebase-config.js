@@ -1,5 +1,5 @@
 window.HABIT_FIREBASE_CONFIG={
- apiKey:"AIzaSyBS9GXvsdS-40_QHUR2nqbIpgkvhoo4c",
+ apiKey:"AIzaSyBS9GXvsdS-40Q_HQUR2nqbIpgkvhoo60c4",
  authDomain:"habit-flow-4f442.firebaseapp.com",
  projectId:"habit-flow-4f442",
  storageBucket:"habit-flow-4f442.firebasestorage.app",
@@ -8,6 +8,4 @@ window.HABIT_FIREBASE_CONFIG={
  measurementId:"G-YQ7QFV5ZK3"
 };
 window.HABIT_VAPID_KEY="BMXHzVWoq6Z_y7mXV3YKg2tZTJxXEnnvvI0HmEd1S1d_fA2kR61sqPtd7QXaGdzpAZhlIj5O-jwWGIh_21LXInw";
-
-// URL рабочего Cloudflare Worker для push-уведомлений.
 window.HABIT_PUSH_WORKER_URL="https://habit-flow-push.asaev-turpal11.workers.dev";
