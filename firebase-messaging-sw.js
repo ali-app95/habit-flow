@@ -2,7 +2,7 @@ importScripts("https://www.gstatic.com/firebasejs/12.19.0/firebase-app-compat.js
 importScripts("https://www.gstatic.com/firebasejs/12.19.0/firebase-messaging-compat.js");
 
 firebase.initializeApp({
-  apiKey:"AIzaSyBS9GXvsdS-40_QHUR2nqbIpgkvhoo60c4",
+  apiKey:"AIzaSyBS9GXvsdS-40_QHUR2nqbIpgkvhoo4c",
   authDomain:"habit-flow-4f442.firebaseapp.com",
   projectId:"habit-flow-4f442",
   storageBucket:"habit-flow-4f442.firebasestorage.app",
