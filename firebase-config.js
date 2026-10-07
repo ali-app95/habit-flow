@@ -1,5 +1,5 @@
 window.HABIT_FIREBASE_CONFIG={
- apiKey:"AIzaSyBS9GXvsdS-40Q_HQUR2nqbIpgkvhoo60c",
+ apiKey:"AIzaSyBS9GXvsdS-40_QHUR2nqbIpgkvhoo4c",
  authDomain:"habit-flow-4f442.firebaseapp.com",
  projectId:"habit-flow-4f442",
  storageBucket:"habit-flow-4f442.firebasestorage.app",
