@@ -11,4 +11,4 @@ crons = ["* * * * *"]
 [[d1_databases]]
 binding = "DB"
 database_name = "habit-flow-push"
-database_id = "REPLACE_WITH_D1_DATABASE_ID"
+database_id = "72681689-aae2-4606-8159-dbfe0a2819a5"
