@@ -201,7 +201,7 @@
 <script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-messaging-compat.js"></script>
-<script src="./firebase-config.js?v=2"></script>
+<script src="./firebase-config.js?v=3"></script>
 <script>
 const KEY="habit-tracker-v2";
 let data=JSON.parse(localStorage.getItem(KEY)||localStorage.getItem("habit-tracker-v1")||'{"habits":[]}');
@@ -387,7 +387,7 @@ async function toggleNotifications(){
    if(!firebase.apps.length)firebase.initializeApp(window.HABIT_FIREBASE_CONFIG);
    const auth=firebase.auth(),msg=firebase.messaging();
    if(!auth.currentUser)await auth.signInAnonymously();
-   const sw=await navigator.serviceWorker.register('./firebase-messaging-sw.js');
+   const sw=await navigator.serviceWorker.register('./firebase-messaging-sw.js?v=3');
    const token=await msg.getToken({vapidKey:window.HABIT_VAPID_KEY,serviceWorkerRegistration:sw});
    if(!token)throw new Error('FCM token не получен');
    data.settings.notifications=true;data.settings.fcmToken=token;
