@@ -385,8 +385,7 @@ async function toggleNotifications(){
   try{
    const p=await Notification.requestPermission();if(p!=='granted'){alert('Разрешение на уведомления не выдано.');return}
    if(!firebase.apps.length)firebase.initializeApp(window.HABIT_FIREBASE_CONFIG);
-   const auth=firebase.auth(),msg=firebase.messaging();
-   if(!auth.currentUser)await auth.signInAnonymously();
+   const msg=firebase.messaging();
    const sw=await navigator.serviceWorker.register('./firebase-messaging-sw.js?v=3');
    const token=await msg.getToken({vapidKey:window.HABIT_VAPID_KEY,serviceWorkerRegistration:sw});
    if(!token)throw new Error('FCM token не получен');
@@ -404,14 +403,10 @@ async function toggleNotifications(){
    throw new Error('Не задан HABIT_PUSH_WORKER_URL');
   }
   if(!firebase.apps.length)firebase.initializeApp(window.HABIT_FIREBASE_CONFIG);
-  const auth=firebase.auth();
-  if(!auth.currentUser)await auth.signInAnonymously();
-  const idToken=await auth.currentUser.getIdToken();
   const response=await fetch(window.HABIT_PUSH_WORKER_URL.replace(/\/$/, '')+'/subscribe',{
    method:'POST',
    headers:{'Content-Type':'application/json'},
    body:JSON.stringify({
-    idToken,
     token:data.settings.fcmToken,
     enabled:!!data.settings.notifications,
     time:data.settings.time||'20:00',
