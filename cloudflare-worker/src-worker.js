@@ -87,7 +87,7 @@ async function sendPush(env, accessToken, row, habit) {
   if (!projectId) throw new Error("Missing Firebase project_id");
   const r = await fetch(`https://fcm.googleapis.com/v1/projects/${projectId}/messages:send`,{
     method:"POST",headers:{Authorization:`Bearer ${accessToken}`,"Content-Type":"application/json"},
-    body:JSON.stringify({message:{token:row.token,notification:{title:"Habit Flow 🔥",body:`Пора: ${habit.name}`},webpush:{fcmOptions:{link:"https://ali-app95.github.io/habit-flow/"}}}})
+    body:JSON.stringify({message:{token:row.token,data:{title:"Habit Flow 🔥",body:`Пора: ${habit.name}`,url:"https://ali-app95.github.io/habit-flow/"},webpush:{headers:{Urgency:"high"},fcmOptions:{link:"https://ali-app95.github.io/habit-flow/"}}}})
   });
   const result = await r.json().catch(()=>({}));
   if (!r.ok) {
