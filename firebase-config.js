@@ -1,4 +1,4 @@
-window.HABIT_FIREBASE_CONFIG={
+const HABIT_FIREBASE_CONFIG={
  apiKey:"AIzaSyBS9GXvsdS-40Q_HQUR2nqbIpgkvhoo60c4",
  authDomain:"habit-flow-4f442.firebaseapp.com",
  projectId:"habit-flow-4f442",
@@ -7,5 +7,9 @@ window.HABIT_FIREBASE_CONFIG={
  appId:"1:917670174871:web:6bea1bf477ca446c97c9d2",
  measurementId:"G-YQ7QFV5ZK3"
 };
-window.HABIT_VAPID_KEY="BMXHzVWoq6Z_y7mXV3YKg2tZTJxXEnnvvI0HmEd1S1d_fA2kR61sqPtd7QXaGdzpAZhlIj5O-jwWGIh_21LXInw";
-window.HABIT_PUSH_WORKER_URL="https://habit-flow-push.asaev-turpal11.workers.dev";
+const HABIT_VAPID_KEY="BMXHzVWoq6Z_y7mXV3YKg2tZTJxXEnnvvI0HmEd1S1d_fA2kR61sqPtd7QXaGdzpAZhlIj5O-jwWGIh_21LXInw";
+const HABIT_PUSH_WORKER_URL="https://habit-flow-push.asaev-turpal11.workers.dev";
+
+globalThis.HABIT_FIREBASE_CONFIG=HABIT_FIREBASE_CONFIG;
+globalThis.HABIT_VAPID_KEY=HABIT_VAPID_KEY;
+globalThis.HABIT_PUSH_WORKER_URL=HABIT_PUSH_WORKER_URL;
