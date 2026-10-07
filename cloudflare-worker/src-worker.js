@@ -38,12 +38,9 @@ async function googleAccessToken(env) {
   cachedAccessToken = data.access_token; cachedAccessTokenExpiry = now + (data.expires_in || 3600);
   return cachedAccessToken;
 }
-async function verifyFirebaseIdToken(idToken, env) {
-  const url = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${encodeURIComponent(env.FIREBASE_WEB_API_KEY)}`;
-  const r = await fetch(url, {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({idToken})});
-  const data = await r.json().catch(()=>({}));
-  if (!r.ok || !data.users || !data.users[0] || !data.users[0].localId) throw new Error("Firebase ID token не прошёл проверку");
-  return data.users[0].localId;
+async function stableUidFromToken(token) {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(token));
+  return Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,"0")).join("");
 }
 async function ensureSchema(env) {
   try { await env.DB.prepare("SELECT habits_json,last_sent_key FROM subscriptions LIMIT 1").first(); }
@@ -62,15 +59,13 @@ function validTimeZone(tz) {
 async function subscribe(request, env) {
   let body;
   try { body = await request.json(); } catch { return responseJson({error:"Invalid JSON"},400); }
-  const {idToken,token,enabled,time,timezone,habits=[]} = body || {};
-  if (typeof idToken !== "string" || idToken.length < 20) return responseJson({error:"Missing Firebase ID token"},401);
+  const {token,enabled,time,timezone,habits=[]} = body || {};
   if (typeof token !== "string" || token.length < 20 || token.length > 8192) return responseJson({error:"Invalid FCM token"},400);
   if (typeof time !== "string" || !/^([01]\d|2[0-3]):[0-5]\d$/.test(time)) return responseJson({error:"Invalid time"},400);
   if (typeof timezone !== "string" || !validTimeZone(timezone)) return responseJson({error:"Invalid timezone"},400);
   if (!Array.isArray(habits) || JSON.stringify(habits).length > 120000) return responseJson({error:"Invalid habits payload"},400);
   await ensureSchema(env);
-  let uid;
-  try { uid = await verifyFirebaseIdToken(idToken, env); } catch (e) { return responseJson({error:e.message || "Unauthorized"},401); }
+  const uid = await stableUidFromToken(token);
   await env.DB.prepare(`INSERT INTO subscriptions (uid,token,enabled,time,timezone,last_sent_date,last_sent_key,habits_json,updated_at)
     VALUES (?,?,?,?,?,NULL,NULL,?,CURRENT_TIMESTAMP)
     ON CONFLICT(uid) DO UPDATE SET token=excluded.token,enabled=excluded.enabled,time=excluded.time,timezone=excluded.timezone,habits_json=excluded.habits_json,updated_at=CURRENT_TIMESTAMP`)
