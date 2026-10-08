@@ -222,7 +222,13 @@ let pushForegroundListenerBound = false;
 
 function ensureFirebase() {
   if (typeof firebase !== 'undefined' && !firebase.apps.length && window.HABIT_FIREBASE_CONFIG) {
-    firebase.initializeApp(window.HABIT_FIREBASE_CONFIG);
+    const app = firebase.initializeApp(window.HABIT_FIREBASE_CONFIG);
+    try {
+      firebase.firestore().settings({
+        experimentalLongPolling: true,
+        merge: true
+      });
+    } catch (e) {}
   }
   return (typeof firebase !== 'undefined' && firebase.apps.length) ? firebase.auth() : null;
 }
