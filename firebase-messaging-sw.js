@@ -1,52 +1,21 @@
-importScripts("./firebase-config.js?v=3");
-importScripts("https://www.gstatic.com/firebasejs/12.19.0/firebase-app-compat.js");
-importScripts("https://www.gstatic.com/firebasejs/12.19.0/firebase-messaging-compat.js");
+importScripts('https://www.gstatic.com/firebasejs/12.19.0/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/12.19.0/firebase-messaging-compat.js');
 
-firebase.initializeApp(globalThis.HABIT_FIREBASE_CONFIG);
+firebase.initializeApp({
+  apiKey: "AIzaSyBS9GXvsdS-40Q_HQUR2nqbIpgkvhoo60c",
+  projectId: "habit-flow-4f442",
+  messagingSenderId: "917670174871",
+  appId: "1:917670174871:web:6bea1bf477ca446c97c9d2"
+});
 
 const messaging = firebase.messaging();
 
-// Определяем базовый путь сайта динамически
-const BASE_URL = self.location.origin;
-
-messaging.onBackgroundMessage(payload => {
-  const data = payload.data || {};
-  
-  self.registration.showNotification(
-    data.title || "Habit Flow",
-    {
-      body: data.body || "Время проверить свои привычки 🔥",
-      icon: `${BASE_URL}/icon-192.png`,
-      badge: `${BASE_URL}/icon-192.png`,
-      tag: "habit-flow-daily",
-      renotify: false,
-      data: { 
-        url: data.url || BASE_URL 
-      }
-    }
-  );
-});
-
-self.addEventListener("notificationclick", event => {
-  event.notification.close();
-  
-  const targetUrl = event.notification.data?.url || BASE_URL;
-
-  event.waitUntil(
-    clients.matchAll({ type: "window", includeUncontrolled: true }).then(clientList => {
-      // Если вкладка уже открыта — фокусируемся на ней
-      for (const client of clientList) {
-        if (client.url.startsWith(BASE_URL) && "focus" in client) {
-          if ("navigate" in client && client.url !== targetUrl) {
-            client.navigate(targetUrl);
-          }
-          return client.focus();
-        }
-      }
-      // Если закрыта — открываем новую
-      if (clients.openWindow) {
-        return clients.openWindow(targetUrl);
-      }
-    })
-  );
+messaging.onBackgroundMessage((payload) => {
+  const notificationTitle = payload.notification?.title || payload.data?.title || 'Habit Flow 🔥';
+  const notificationOptions = {
+    body: payload.notification?.body || payload.data?.body || 'Время проверить привычки!',
+    icon: './favicon-32.png',
+    data: { url: payload.data?.url || './' }
+  };
+  self.registration.showNotification(notificationTitle, notificationOptions);
 });
