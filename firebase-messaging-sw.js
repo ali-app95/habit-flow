@@ -6,33 +6,47 @@ firebase.initializeApp(globalThis.HABIT_FIREBASE_CONFIG);
 
 const messaging = firebase.messaging();
 
+// Определяем базовый путь сайта динамически
+const BASE_URL = self.location.origin;
+
 messaging.onBackgroundMessage(payload => {
   const data = payload.data || {};
+  
   self.registration.showNotification(
     data.title || "Habit Flow",
     {
       body: data.body || "Время проверить свои привычки 🔥",
-      icon: "/habit-flow/icon-192.png",
-      badge: "/habit-flow/icon-192.png",
+      icon: `${BASE_URL}/icon-192.png`,
+      badge: `${BASE_URL}/icon-192.png`,
       tag: "habit-flow-daily",
       renotify: false,
-      data: { url: data.url || "https://ali-app95.github.io/habit-flow/" }
+      data: { 
+        url: data.url || BASE_URL 
+      }
     }
   );
 });
 
 self.addEventListener("notificationclick", event => {
   event.notification.close();
+  
+  const targetUrl = event.notification.data?.url || BASE_URL;
+
   event.waitUntil(
-    clients.matchAll({ type: "window", includeUncontrolled: true }).then(list => {
-      const target = event.notification.data?.url || "https://ali-app95.github.io/habit-flow/";
-      for (const client of list) {
-        if ("focus" in client) {
-          client.navigate(target);
+    clients.matchAll({ type: "window", includeUncontrolled: true }).then(clientList => {
+      // Если вкладка уже открыта — фокусируемся на ней
+      for (const client of clientList) {
+        if (client.url.startsWith(BASE_URL) && "focus" in client) {
+          if ("navigate" in client && client.url !== targetUrl) {
+            client.navigate(targetUrl);
+          }
           return client.focus();
         }
       }
-      return clients.openWindow(target);
+      // Если закрыта — открываем новую
+      if (clients.openWindow) {
+        return clients.openWindow(targetUrl);
+      }
     })
   );
 });
