@@ -398,47 +398,42 @@ async function toggleNotifications(){
   }catch(e){console.error(e);data.settings.notifications=false;save();alert('Не удалось подключить push. Проверь Firebase Authentication, разрешение уведомлений и настройки Cloudflare Worker. Подробности — в консоли браузера.')}
  }
  async function syncPushSettings(){
-  if(!data.settings.fcmToken)return;
+  if(!data.settings.fcmToken) return;
   if(!window.HABIT_PUSH_WORKER_URL || window.HABIT_PUSH_WORKER_URL.includes('YOUR-WORKER')){
-   throw new Error('Не задан HABIT_PUSH_WORKER_URL');
+    throw new Error('Не задан HABIT_PUSH_WORKER_URL');
   }
-  if(!firebase.apps.length)firebase.initializeApp(window.HABIT_FIREBASE_CONFIG);
-  const response=await fetch(window.HABIT_PUSH_WORKER_URL.replace(/\/$/, '')+'/subscribe',{
-   method:'POST',
-   headers:{'Content-Type':'application/json'},
-   body:JSON.stringify({
-    token:data.settings.fcmToken,
-    enabled:!!data.settings.notifications,
-    time:data.settings.time||'20:00',
-    timezone:data.settings.timezone||Intl.DateTimeFormat().resolvedOptions().timeZone||'UTC',
-    habits:data.habits.map(h=>({id:h.id,name:h.name,icon:h.icon,frequency:h.frequency||'daily',weekdays:Array.isArray(h.weekdays)?h.weekdays:[],reminder:h.reminder||'',done:{[todayKey()]:!!(h.done&&h.done[todayKey()])}}))
-   })
-  });
-  if(!response.ok){
-   const detail=await response.text().catch(()=> '');
-   throw new Error('Cloudflare Worker HTTP '+response.status+' '+detail);
-  }
- }
- function exportData(){
- const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
- a.href=url;a.download='habit-flow-backup.json';a.click();URL.revokeObjectURL(url);
-}
-async function resetAll(){
- if(!confirm('Точно удалить все привычки и историю?'))return;
- const oldSettings=data.settings||{};
- if(oldSettings.notifications&&oldSettings.fcmToken){
-  try{data.settings.notifications=false;await syncPushSettings()}catch(e){console.error('Push disable failed',e)}
- }
- data={habits:[],settings:{notifications:false,time:'20:00'}};
- save();
-}
-function renderAll(){renderHome();renderCalendar();renderStats();renderProfile();initTheme()}
 
-renderAll();
-try{
- ensureFirebase().onAuthStateChanged(handleAuthState);
- if(data.settings.notifications) bindForegroundPushListener();
-}catch(e){console.error('Firebase initialization failed',e);setAccountStatus('Не удалось инициализировать Firebase. Проверь firebase-config.js.')}
-</script>
-</body>
-</html>
+  const auth = ensureFirebase();
+  // Если пользователь не залогинен, создаем временную анонимную сессию для безопасного токена
+  if (!auth.currentUser) {
+    await auth.signInAnonymously();
+  }
+  const idToken = await auth.currentUser.getIdToken();
+
+  const response = await fetch(window.HABIT_PUSH_WORKER_URL.replace(/\/$/, '') + '/subscribe', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      idToken: idToken,
+      token: data.settings.fcmToken,
+      enabled: !!data.settings.notifications,
+      time: data.settings.time || '20:00',
+      timezone: data.settings.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+      habits: data.habits.map(h => ({
+        id: h.id,
+        name: h.name,
+        icon: h.icon,
+        frequency: h.frequency || 'daily',
+        weekdays: Array.isArray(h.weekdays) ? h.weekdays : [],
+        // Если у самой привычки не выставлено персональное время, берем общее время уведомлений
+        reminder: h.reminder || data.settings.time || '20:00',
+        done: { [todayKey()]: !!(h.done && h.done[todayKey()]) }
+      }))
+    })
+  });
+
+  if(!response.ok){
+    const detail = await response.text().catch(() => '');
+    throw new Error('Cloudflare Worker HTTP ' + response.status + ' ' + detail);
+  }
+}
