@@ -271,8 +271,7 @@ function queueCloudSave() {
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     })
   ).catch(e => {
-    console.error('Cloud save failed', e);
-    setAccountStatus('Не удалось сохранить в облако. Проверь интернет; локальная копия сохранена.');
+    console.warn('Cloud save skipped (offline):', e);
   });
 }
 
