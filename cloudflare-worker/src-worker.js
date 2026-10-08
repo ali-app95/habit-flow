@@ -186,7 +186,7 @@ async function sendPush(env, accessToken, row, habitsDue) {
     }
   }
 
-  const r = await fetch(`https://fcm.googleapis.com/v1/projects/${projectId}/messages:send`, {
+ const r = await fetch(`https://fcm.googleapis.com/v1/projects/${projectId}/messages:send`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -195,6 +195,10 @@ async function sendPush(env, accessToken, row, habitsDue) {
     body: JSON.stringify({
       message: {
         token: row.token,
+        notification: {
+          title: title,
+          body: body
+        },
         data: {
           title: title,
           body: body,
