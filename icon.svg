@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<defs>
+  <linearGradient id="bg" x1="60" y1="40" x2="450" y2="470" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#63e6c5"/><stop offset=".48" stop-color="#14a98b"/><stop offset="1" stop-color="#075f70"/>
+  </linearGradient>
+  <linearGradient id="sun" x1="340" y1="90" x2="410" y2="180" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#fff7bd"/><stop offset="1" stop-color="#ffd75a"/>
+  </linearGradient>
+  <linearGradient id="leaf" x1="310" y1="390" x2="430" y2="300" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#21a85a"/><stop offset="1" stop-color="#a7ef54"/>
+  </linearGradient>
+  <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+    <feDropShadow dx="0" dy="14" stdDeviation="16" flood-opacity=".22"/>
+  </filter>
+</defs>
+<rect x="18" y="18" width="476" height="476" rx="112" fill="url(#bg)"/>
+<path d="M18 300C105 235 190 226 270 250c88 26 148 12 224-37v281H18Z" fill="#064f64" opacity=".3"/>
+<circle cx="394" cy="126" r="43" fill="url(#sun)"/>
+<g stroke="#fff4b0" stroke-width="13" stroke-linecap="round" opacity=".9">
+ <path d="M394 64v-20"/><path d="M394 208v-20"/><path d="m332 126-19-10"/><path d="m456 126 19-10"/>
+ <path d="m349 81-14-14"/><path d="m439 81 14-14"/>
+</g>
+<g filter="url(#shadow)">
+ <circle cx="244" cy="260" r="136" fill="#075f70" fill-opacity=".72" stroke="#ecfff8" stroke-width="24"/>
+ <path d="M154 282c-18-74 30-144 104-158 42-8 85 5 116 36" fill="none" stroke="#f6fff9" stroke-width="24" stroke-linecap="round"/>
+ <path d="m190 258 43 43 92-96" fill="none" stroke="#f6fff9" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<path d="M320 425c12-91 63-133 133-141-4 73-38 127-133 141Z" fill="url(#leaf)" stroke="#d8ff86" stroke-width="5"/>
+<path d="M315 426c-48-54-97-62-140-48 29 59 77 78 140 48Z" fill="#39bd67" stroke="#b9f36d" stroke-width="5"/>
+<path d="M324 415c29-42 62-75 101-99" fill="none" stroke="#dfff9b" stroke-width="7" stroke-linecap="round" opacity=".8"/>
+</svg>
