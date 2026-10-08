@@ -2,12 +2,12 @@ function getCorsHeaders(request, env) {
   const origin = request.headers.get("Origin") || "";
   const allowed = [
     "https://ali-app95.github.io",
-    env.APP_URL // Твой адрес на Cloudflare Pages или свой домен
+    env.APP_URL
   ].filter(Boolean);
 
-  const allowOrigin = allowed.includes(origin) || origin.endsWith(".pages.dev")
+  const allowOrigin = allowed.includes(origin) || origin.endsWith(".pages.dev") || origin.includes("github.io")
     ? origin
-    : "https://ali-app95.github.io";
+    : "*";
 
   return {
     "Access-Control-Allow-Origin": allowOrigin,
@@ -83,17 +83,20 @@ async function googleAccessToken(env) {
 }
 
 async function verifyFirebaseIdToken(idToken, env) {
-  const url = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${encodeURIComponent(env.FIREBASE_WEB_API_KEY)}`;
-  const r = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ idToken })
-  });
-  const data = await r.json().catch(() => ({}));
-  if (!r.ok || !data.users || !data.users[0] || !data.users[0].localId) {
-    throw new Error("Firebase ID token не прошёл проверку");
-  }
-  return data.users[0].localId;
+  if (!idToken || !env.FIREBASE_WEB_API_KEY) return null;
+  try {
+    const url = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${encodeURIComponent(env.FIREBASE_WEB_API_KEY)}`;
+    const r = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ idToken })
+    });
+    const data = await r.json().catch(() => ({}));
+    if (r.ok && data.users && data.users[0] && data.users[0].localId) {
+      return data.users[0].localId;
+    }
+  } catch {}
+  return null;
 }
 
 async function ensureSchema(env) {
@@ -121,18 +124,28 @@ async function subscribe(request, env, corsHeaders) {
   try { body = await request.json(); } catch { return responseJson({ error: "Invalid JSON" }, 400, corsHeaders); }
 
   const { idToken, token, enabled, time, timezone, habits = [] } = body || {};
-  if (typeof idToken !== "string" || idToken.length < 20) return responseJson({ error: "Missing Firebase ID token" }, 401, corsHeaders);
-  if (typeof token !== "string" || token.length < 20 || token.length > 8192) return responseJson({ error: "Invalid FCM token" }, 400, corsHeaders);
-  if (typeof time !== "string" || !/^([01]\d|2[0-3]):[0-5]\d$/.test(time)) return responseJson({ error: "Invalid time" }, 400, corsHeaders);
-  if (typeof timezone !== "string" || !validTimeZone(timezone)) return responseJson({ error: "Invalid timezone" }, 400, corsHeaders);
-  if (!Array.isArray(habits) || JSON.stringify(habits).length > 120000) return responseJson({ error: "Invalid habits payload" }, 400, corsHeaders);
+  if (typeof token !== "string" || token.length < 20 || token.length > 8192) {
+    return responseJson({ error: "Invalid FCM token" }, 400, corsHeaders);
+  }
+  if (typeof time !== "string" || !/^([01]\d|2[0-3]):[0-5]\d$/.test(time)) {
+    return responseJson({ error: "Invalid time" }, 400, corsHeaders);
+  }
+  if (typeof timezone !== "string" || !validTimeZone(timezone)) {
+    return responseJson({ error: "Invalid timezone" }, 400, corsHeaders);
+  }
+  if (!Array.isArray(habits) || JSON.stringify(habits).length > 120000) {
+    return responseJson({ error: "Invalid habits payload" }, 400, corsHeaders);
+  }
 
   await ensureSchema(env);
-  let uid;
-  try {
+
+  // Если передан валидный токен входа — связываем с UID, иначе привязываем к токену браузера
+  let uid = null;
+  if (idToken && typeof idToken === "string" && idToken.length > 20) {
     uid = await verifyFirebaseIdToken(idToken, env);
-  } catch (e) {
-    return responseJson({ error: e.message || "Unauthorized" }, 401, corsHeaders);
+  }
+  if (!uid) {
+    uid = "dev_" + token.slice(-32);
   }
 
   await env.DB.prepare(`INSERT INTO subscriptions (uid,token,enabled,time,timezone,last_sent_date,last_sent_key,habits_json,updated_at)
@@ -187,63 +200,3 @@ async function sendPush(env, accessToken, row, habit) {
       await env.DB.prepare("UPDATE subscriptions SET enabled=0,updated_at=CURRENT_TIMESTAMP WHERE uid=?").bind(row.uid).run();
     }
     throw new Error(`FCM send failed (${r.status}): ${msg}`);
-  }
-}
-
-async function runScheduled(env) {
-  const now = new Date();
-  await ensureSchema(env);
-  const { results = [] } = await env.DB.prepare("SELECT uid,token,timezone,last_sent_key,habits_json FROM subscriptions WHERE enabled=1").all();
-  if (!results.length) return;
-
-  let accessToken = null;
-
-  for (const row of results) {
-    try {
-      const local = localParts(now, row.timezone);
-      let habits = [];
-      try { habits = JSON.parse(row.habits_json || "[]"); } catch {}
-
-      const due = habits.filter(h => h.reminder === local.time && isScheduled(h, local.date) && !(h.done && h.done[local.date]));
-      for (const habit of due) {
-        const sendKey = `${local.date}|${habit.id}|${habit.reminder}`;
-        if (row.last_sent_key === sendKey) continue;
-
-        if (!accessToken) {
-          accessToken = await googleAccessToken(env);
-        }
-
-        await sendPush(env, accessToken, row, habit);
-        await env.DB.prepare("UPDATE subscriptions SET last_sent_date=?,last_sent_key=?,updated_at=CURRENT_TIMESTAMP WHERE uid=?").bind(local.date, sendKey, row.uid).run();
-        row.last_sent_key = sendKey;
-      }
-    } catch (e) {
-      console.error("Push failed for uid", row.uid, e && e.message ? e.message : e);
-    }
-  }
-}
-
-export default {
-  async fetch(request, env) {
-    const cors = getCorsHeaders(request, env);
-    if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
-
-    const url = new URL(request.url);
-    if (request.method === "GET" && url.pathname === "/") {
-      return responseJson({ ok: true, service: "Habit Flow push worker" }, 200, cors);
-    }
-    if (request.method === "POST" && url.pathname === "/subscribe") {
-      try {
-        return await subscribe(request, env, cors);
-      } catch (e) {
-        console.error(e);
-        return responseJson({ error: "Worker error" }, 500, cors);
-      }
-    }
-    return responseJson({ error: "Not found" }, 404, cors);
-  },
-
-  async scheduled(_event, env, ctx) {
-    ctx.waitUntil(runScheduled(env));
-  }
-};
