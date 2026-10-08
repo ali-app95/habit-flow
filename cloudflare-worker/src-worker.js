@@ -139,7 +139,6 @@ async function subscribe(request, env, corsHeaders) {
 
   await ensureSchema(env);
 
-  // Если передан валидный токен входа — связываем с UID, иначе привязываем к токену браузера
   let uid = null;
   if (idToken && typeof idToken === "string" && idToken.length > 20) {
     uid = await verifyFirebaseIdToken(idToken, env);
@@ -164,12 +163,28 @@ function localParts(date, timezone) {
   return { date: `${p.year}-${p.month}-${p.day}`, time: `${p.hour}:${p.minute}` };
 }
 
-async function sendPush(env, accessToken, row, habit) {
+async function sendPush(env, accessToken, row, habitsDue) {
   const sa = JSON.parse(env.GOOGLE_SERVICE_ACCOUNT_JSON);
   const projectId = sa.project_id || env.FIREBASE_PROJECT_ID;
   if (!projectId) throw new Error("Missing Firebase project_id");
 
   const appUrl = env.APP_URL || "https://ali-app95.github.io/habit-flow/";
+
+  let title = "Habit Flow 🔥";
+  let body = "";
+
+  if (habitsDue.length === 1) {
+    const h = habitsDue[0];
+    body = `Пора: ${h.name} ${h.icon || ""}`.trim();
+  } else {
+    title = `Привычки на это время (${habitsDue.length}) 🔥`;
+    const names = habitsDue.map(h => h.name);
+    if (names.length <= 2) {
+      body = `Пора выполнить: ${names.join(", ")}`;
+    } else {
+      body = `Пора выполнить: ${names.slice(0, 2).join(", ")} и ещё ${names.length - 2}`;
+    }
+  }
 
   const r = await fetch(`https://fcm.googleapis.com/v1/projects/${projectId}/messages:send`, {
     method: "POST",
@@ -181,8 +196,8 @@ async function sendPush(env, accessToken, row, habit) {
       message: {
         token: row.token,
         data: {
-          title: "Habit Flow 🔥",
-          body: `Пора: ${habit.name}`,
+          title: title,
+          body: body,
           url: appUrl
         },
         webpush: {
@@ -200,3 +215,59 @@ async function sendPush(env, accessToken, row, habit) {
       await env.DB.prepare("UPDATE subscriptions SET enabled=0,updated_at=CURRENT_TIMESTAMP WHERE uid=?").bind(row.uid).run();
     }
     throw new Error(`FCM send failed (${r.status}): ${msg}`);
+  }
+}
+
+async function runScheduled(env) {
+  const now = new Date();
+  await ensureSchema(env);
+  const { results = [] } = await env.DB.prepare("SELECT uid,token,time,timezone,last_sent_key,habits_json FROM subscriptions WHERE enabled=1").all();
+  if (!results.length) return;
+
+  let accessToken = null;
+
+  for (const row of results) {
+    try {
+      const local = localParts(now, row.timezone);
+      let habits = [];
+      try { habits = JSON.parse(row.habits_json || "[]"); } catch {}
+
+      // Отбираем привычки, назначенное время которых наступило прямо сейчас
+      const due = habits.filter(h => {
+        const remTime = h.reminder || row.time;
+        return remTime === local.time && isScheduled(h, local.date) && !(h.done && h.done[local.date]);
+      });
+
+      if (!due.length) continue;
+
+      // Ключ блокирует повторную отправку в одну и ту же минуту
+      const sendKey = `${local.date}|${local.time}`;
+      if (row.last_sent_key === sendKey) continue;
+
+      if (!accessToken) {
+        accessToken = await googleAccessToken(env);
+      }
+
+      await sendPush(env, accessToken, row, due);
+      await env.DB.prepare("UPDATE subscriptions SET last_sent_date=?,last_sent_key=?,updated_at=CURRENT_TIMESTAMP WHERE uid=?")
+        .bind(local.date, sendKey, row.uid).run();
+      row.last_sent_key = sendKey;
+    } catch (e) {
+      console.error("Push failed for uid", row.uid, e && e.message ? e.message : e);
+    }
+  }
+}
+
+export default {
+  async fetch(request, env) {
+    const cors = getCorsHeaders(request, env);
+    if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
+
+    const url = new URL(request.url);
+    if (request.method === "GET" && url.pathname === "/") {
+      return responseJson({ ok: true, service: "Habit Flow push worker" }, 200, cors);
+    }
+    if (request.method === "POST" && url.pathname === "/subscribe") {
+      try {
+        return await subscribe(request, env, cors);
+      } catch (e
