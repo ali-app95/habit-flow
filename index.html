@@ -2,59 +2,59 @@
 <html lang="ru">
 <head>
   <link rel="icon" href="./favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png">
-<link rel="apple-touch-icon" href="./apple-touch-icon.png">
-<link rel="manifest" href="./site.webmanifest">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#f5f6f8">
-<title>Habit Flow — трекер привычек</title>
-<style>
-:root{--bg:#f5f6f8;--card:#fff;--text:#17191c;--muted:#7a8088;--line:#e7e9ed;--soft:#f0f1f3;--accent:#17191c;--green:#17804a;--greenbg:#dff6e8;--red:#d94b4b}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-.app{max-width:920px;margin:auto;padding:22px 16px 100px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.eyebrow{font-size:12px;color:var(--muted);margin-bottom:4px}.top h1{font-size:28px;margin:0}.primary{background:var(--accent);color:#fff;border:0;border-radius:13px;padding:11px 15px;font:inherit;cursor:pointer}
-.view{display:none}.view.active{display:block}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:16px}.stat,.card{background:var(--card);border:1px solid var(--line);border-radius:18px}.stat{padding:14px}.stat b{font-size:22px;display:block}.stat span{font-size:11px;color:var(--muted)}.today-hero{padding:18px;margin-bottom:16px;background:var(--card)}.today-hero-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.today-hero-title b{display:block;font-size:18px}.today-hero-title span{display:block;color:var(--muted);font-size:12px;margin-top:4px}.today-percent{font-size:27px;font-weight:800}.today-progress{margin-top:15px}.today-progress-head{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);margin-bottom:8px}.today-progress-head b{color:var(--text);font-size:13px}.today-progress .bar{height:10px}.today-progress .fill{background:var(--accent)}
-.title-row{display:flex;justify-content:space-between;align-items:center;margin:18px 2px 11px}.title-row h2{font-size:18px;margin:0}.muted{font-size:13px;color:var(--muted)}
-.list{display:grid;gap:8px}.habit{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:11px 12px;display:flex;align-items:center;gap:11px;transition:transform .15s,box-shadow .15s,border-color .15s}.habit:has(.check:hover){border-color:#d4d7dc;box-shadow:0 3px 12px #17191c0a}.icon{width:42px;height:42px;border-radius:13px;background:var(--soft);display:grid;place-items:center;font-size:20px;flex:none}.info{flex:1;min-width:0}.name{font-weight:700;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.meta{font-size:11px;color:var(--muted);margin-top:5px;display:flex;align-items:center;gap:5px}.streak{display:inline-flex;align-items:center;gap:3px;padding:3px 7px;border-radius:999px;background:#fff4df;color:#9a6500;font-weight:650}.record{color:var(--muted)}.actions{display:flex;gap:5px;align-items:center}.small{border:0;background:var(--soft);color:var(--muted);border-radius:10px;padding:7px 9px;cursor:pointer}.check{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--soft);font-size:19px;font-weight:700;cursor:pointer;transition:.15s}.check:hover{transform:scale(1.04)}.done .check{background:var(--greenbg);border-color:#c9ecd7;color:var(--green)}.done .name{text-decoration:line-through;color:#7b8188}.done .icon{background:var(--greenbg)}
-.progress{padding:16px;margin-top:15px}.progress-head{display:flex;justify-content:space-between;font-size:13px;margin-bottom:9px}.bar{height:9px;background:#eceef1;border-radius:20px;overflow:hidden}.fill{height:100%;background:var(--accent);border-radius:20px;transition:.25s}
-.empty{text-align:center;padding:32px;color:var(--muted);background:var(--card);border:1px dashed #d6d9de;border-radius:18px}
-.week{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}.day{padding:10px 4px;text-align:center;border-radius:14px;background:var(--card);border:1px solid var(--line);cursor:pointer}.day small{display:block;color:var(--muted);font-size:10px}.day b{display:block;font-size:15px;margin:4px 0}.day i{display:block;width:7px;height:7px;border-radius:50%;background:#d9dce0;margin:auto}.day.has i{background:var(--green)}.day.today{border-color:#aaa}
-.calendar{padding:15px}.month-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.month-head button{border:0;background:var(--soft);border-radius:10px;padding:8px 11px;cursor:pointer}.calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.calgrid div{min-height:40px;padding:5px;text-align:center;border-radius:10px;font-size:12px}.calhead{color:var(--muted);font-size:10px!important;min-height:auto!important}.calday{background:var(--soft);cursor:pointer}.calday.done{background:var(--greenbg);color:var(--green);font-weight:700}.calday.selected{outline:2px solid #aaa}
-.analytics{display:grid;grid-template-columns:1fr 1fr;gap:12px}.big{padding:18px}.big b{font-size:34px}.stats-hero{padding:18px 18px 16px;background:linear-gradient(135deg,#17191c 0%,#332c45 100%);color:#fff;border:0}.stats-hero-top{display:flex;align-items:center;gap:12px}.stats-hero-icon{width:46px;height:46px;border-radius:15px;background:#ffffff18;display:grid;place-items:center;font-size:23px}.stats-hero-title b{display:block;font-size:17px}.stats-hero-title span{display:block;color:#cfd1d5;font-size:12px;margin-top:3px}.stats-hero-main{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:17px}.stats-hero-metric{background:#ffffff12;border:1px solid #ffffff12;border-radius:15px;padding:13px}.stats-hero-metric strong{display:block;font-size:30px;line-height:1}.stats-hero-metric span{display:block;color:#cfd1d5;font-size:11px;margin-top:6px}.stats-section{padding:16px}.stats-section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}.stats-section-head b{font-size:15px}.stats-section-head span{font-size:11px;color:var(--muted)}.barlist{display:grid;gap:11px;margin:0}.barrow{display:grid;grid-template-columns:42px minmax(0,1fr) 42px;gap:9px;align-items:center;font-size:12px}.barrow>span{color:var(--muted);font-weight:600;text-transform:capitalize}.barrow .line{height:10px;background:var(--soft);border-radius:20px;overflow:hidden}.barrow .line i{display:block;height:100%;background:var(--accent);border-radius:20px}.barrow b{text-align:right;font-size:12px}.habit-barrow{grid-template-columns:minmax(110px,1.15fr) minmax(90px,2fr) 38px;font-size:12px}.habit-stat-name{min-width:0;line-height:1.25;overflow-wrap:anywhere}.habit-barrow .line{min-width:0}.stats-empty{padding:18px 4px 3px;color:var(--muted);font-size:12px;text-align:center}@media(max-width:560px){.stats-hero-main{gap:8px}.stats-hero-metric{padding:12px}.stats-hero-metric strong{font-size:27px}.habit-barrow{grid-template-columns:minmax(105px,1.15fr) minmax(75px,2fr) 36px;gap:7px}.habit-stat-name{font-size:12px}}
-.bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);padding:8px max(12px,calc((100vw - 920px)/2));display:flex;justify-content:center;z-index:5}.nav{width:min(520px,100%);display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.nav button{border:0;background:transparent;color:var(--muted);padding:8px;border-radius:12px;font:inherit;cursor:pointer}.nav button.active{background:var(--soft);color:var(--text);font-weight:650}
-.overlay{position:fixed;inset:0;background:#0007;display:none;align-items:flex-end;justify-content:center;padding:14px;z-index:10}.overlay.show{display:flex}.modal{background:#fff;width:min(520px,100%);border-radius:24px;padding:21px}.modal h2{margin:0 0 16px}.field{margin-bottom:13px}.field label{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}.field input,.field select{width:100%;padding:13px;border:1px solid var(--line);border-radius:12px;font:inherit;background:#fff}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}.ghost{border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 14px;font:inherit;cursor:pointer}.danger{color:var(--red)}
-@media(max-width:620px){.app{padding:18px 12px 92px}.top h1{font-size:25px}.stats{gap:6px}.stat{padding:11px 9px}.stat b{font-size:19px}.stat span{font-size:10px}.today-hero{padding:16px}.today-hero-title b{font-size:17px}.today-percent{font-size:25px}.analytics{grid-template-columns:1fr}.habit{padding:10px}.actions{gap:4px}.actions .small{padding:7px}.actions .edit,.actions .delete{display:inline-flex;align-items:center;justify-content:center}.check{width:40px;height:40px}.meta{font-size:10px}}
+  <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png">
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+  <link rel="manifest" href="./site.webmanifest">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f5f6f8">
+  <title>Habit Flow — трекер привычек</title>
+  <style>
+  :root{--bg:#f5f6f8;--card:#fff;--text:#17191c;--muted:#7a8088;--line:#e7e9ed;--soft:#f0f1f3;--accent:#17191c;--green:#17804a;--greenbg:#dff6e8;--red:#d94b4b}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+  .app{max-width:920px;margin:auto;padding:22px 16px 100px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.eyebrow{font-size:12px;color:var(--muted);margin-bottom:4px}.top h1{font-size:28px;margin:0}.primary{background:var(--accent);color:#fff;border:0;border-radius:13px;padding:11px 15px;font:inherit;cursor:pointer}
+  .view{display:none}.view.active{display:block}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:16px}.stat,.card{background:var(--card);border:1px solid var(--line);border-radius:18px}.stat{padding:14px}.stat b{font-size:22px;display:block}.stat span{font-size:11px;color:var(--muted)}.today-hero{padding:18px;margin-bottom:16px;background:var(--card)}.today-hero-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.today-hero-title b{display:block;font-size:18px}.today-hero-title span{display:block;color:var(--muted);font-size:12px;margin-top:4px}.today-percent{font-size:27px;font-weight:800}.today-progress{margin-top:15px}.today-progress-head{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);margin-bottom:8px}.today-progress-head b{color:var(--text);font-size:13px}.today-progress .bar{height:10px}.today-progress .fill{background:var(--accent)}
+  .title-row{display:flex;justify-content:space-between;align-items:center;margin:18px 2px 11px}.title-row h2{font-size:18px;margin:0}.muted{font-size:13px;color:var(--muted)}
+  .list{display:grid;gap:8px}.habit{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:11px 12px;display:flex;align-items:center;gap:11px;transition:transform .15s,box-shadow .15s,border-color .15s}.habit:has(.check:hover){border-color:#d4d7dc;box-shadow:0 3px 12px #17191c0a}.icon{width:42px;height:42px;border-radius:13px;background:var(--soft);display:grid;place-items:center;font-size:20px;flex:none}.info{flex:1;min-width:0}.name{font-weight:700;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.meta{font-size:11px;color:var(--muted);margin-top:5px;display:flex;align-items:center;gap:5px}.streak{display:inline-flex;align-items:center;gap:3px;padding:3px 7px;border-radius:999px;background:#fff4df;color:#9a6500;font-weight:650}.record{color:var(--muted)}.actions{display:flex;gap:5px;align-items:center}.small{border:0;background:var(--soft);color:var(--muted);border-radius:10px;padding:7px 9px;cursor:pointer}.check{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--soft);font-size:19px;font-weight:700;cursor:pointer;transition:.15s}.check:hover{transform:scale(1.04)}.done .check{background:var(--greenbg);border-color:#c9ecd7;color:var(--green)}.done .name{text-decoration:line-through;color:#7b8188}.done .icon{background:var(--greenbg)}
+  .progress{padding:16px;margin-top:15px}.progress-head{display:flex;justify-content:space-between;font-size:13px;margin-bottom:9px}.bar{height:9px;background:#eceef1;border-radius:20px;overflow:hidden}.fill{height:100%;background:var(--accent);border-radius:20px;transition:.25s}
+  .empty{text-align:center;padding:32px;color:var(--muted);background:var(--card);border:1px dashed #d6d9de;border-radius:18px}
+  .week{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}.day{padding:10px 4px;text-align:center;border-radius:14px;background:var(--card);border:1px solid var(--line);cursor:pointer}.day small{display:block;color:var(--muted);font-size:10px}.day b{display:block;font-size:15px;margin:4px 0}.day i{display:block;width:7px;height:7px;border-radius:50%;background:#d9dce0;margin:auto}.day.has i{background:var(--green)}.day.today{border-color:#aaa}
+  .calendar{padding:15px}.month-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.month-head button{border:0;background:var(--soft);border-radius:10px;padding:8px 11px;cursor:pointer}.calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.calgrid div{min-height:40px;padding:5px;text-align:center;border-radius:10px;font-size:12px}.calhead{color:var(--muted);font-size:10px!important;min-height:auto!important}.calday{background:var(--soft);cursor:pointer}.calday.done{background:var(--greenbg);color:var(--green);font-weight:700}.calday.selected{outline:2px solid #aaa}
+  .analytics{display:grid;grid-template-columns:1fr 1fr;gap:12px}.big{padding:18px}.big b{font-size:34px}.stats-hero{padding:18px 18px 16px;background:linear-gradient(135deg,#17191c 0%,#332c45 100%);color:#fff;border:0}.stats-hero-top{display:flex;align-items:center;gap:12px}.stats-hero-icon{width:46px;height:46px;border-radius:15px;background:#ffffff18;display:grid;place-items:center;font-size:23px}.stats-hero-title b{display:block;font-size:17px}.stats-hero-title span{display:block;color:#cfd1d5;font-size:12px;margin-top:3px}.stats-hero-main{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:17px}.stats-hero-metric{background:#ffffff12;border:1px solid #ffffff12;border-radius:15px;padding:13px}.stats-hero-metric strong{display:block;font-size:30px;line-height:1}.stats-hero-metric span{display:block;color:#cfd1d5;font-size:11px;margin-top:6px}.stats-section{padding:16px}.stats-section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}.stats-section-head b{font-size:15px}.stats-section-head span{font-size:11px;color:var(--muted)}.barlist{display:grid;gap:11px;margin:0}.barrow{display:grid;grid-template-columns:42px minmax(0,1fr) 42px;gap:9px;align-items:center;font-size:12px}.barrow>span{color:var(--muted);font-weight:600;text-transform:capitalize}.barrow .line{height:10px;background:var(--soft);border-radius:20px;overflow:hidden}.barrow .line i{display:block;height:100%;background:var(--accent);border-radius:20px}.barrow b{text-align:right;font-size:12px}.habit-barrow{grid-template-columns:minmax(110px,1.15fr) minmax(90px,2fr) 38px;font-size:12px}.habit-stat-name{min-width:0;line-height:1.25;overflow-wrap:anywhere}.habit-barrow .line{min-width:0}.stats-empty{padding:18px 4px 3px;color:var(--muted);font-size:12px;text-align:center}@media(max-width:560px){.stats-hero-main{gap:8px}.stats-hero-metric{padding:12px}.stats-hero-metric strong{font-size:27px}.habit-barrow{grid-template-columns:minmax(105px,1.15fr) minmax(75px,2fr) 36px;gap:7px}.habit-stat-name{font-size:12px}}
+  .bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);padding:8px max(12px,calc((100vw - 920px)/2));display:flex;justify-content:center;z-index:5}.nav{width:min(520px,100%);display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.nav button{border:0;background:transparent;color:var(--muted);padding:8px;border-radius:12px;font:inherit;cursor:pointer}.nav button.active{background:var(--soft);color:var(--text);font-weight:650}
+  .overlay{position:fixed;inset:0;background:#0007;display:none;align-items:flex-end;justify-content:center;padding:14px;z-index:10}.overlay.show{display:flex}.modal{background:#fff;width:min(520px,100%);border-radius:24px;padding:21px}.modal h2{margin:0 0 16px}.field{margin-bottom:13px}.field label{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}.field input,.field select{width:100%;padding:13px;border:1px solid var(--line);border-radius:12px;font:inherit;background:#fff}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}.ghost{border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 14px;font:inherit;cursor:pointer}.danger{color:var(--red)}
+  @media(max-width:620px){.app{padding:18px 12px 92px}.top h1{font-size:25px}.stats{gap:6px}.stat{padding:11px 9px}.stat b{font-size:19px}.stat span{font-size:10px}.today-hero{padding:16px}.today-hero-title b{font-size:17px}.today-percent{font-size:25px}.analytics{grid-template-columns:1fr}.habit{padding:10px}.actions{gap:4px}.actions .small{padding:7px}.actions .edit,.actions .delete{display:inline-flex;align-items:center;justify-content:center}.check{width:40px;height:40px}.meta{font-size:10px}}
 
-.profile-card{padding:18px;display:flex;align-items:center;gap:14px}.avatar{width:58px;height:58px;border-radius:18px;background:var(--soft);display:grid;place-items:center;font-size:27px}.profile-card h2{margin:0;font-size:18px}.profile-card p{margin:4px 0 0;color:var(--muted);font-size:12px}.profile-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.profile-summary-item{background:var(--soft);border-radius:13px;padding:11px}.profile-summary-item b{display:block;font-size:17px}.profile-summary-item span{display:block;color:var(--muted);font-size:10px;margin-top:3px}.category{display:inline-flex;align-items:center;gap:5px;background:var(--soft);border-radius:999px;padding:4px 8px;font-size:10px;color:var(--muted);margin-top:6px}.category-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.cat-btn{border:1px solid var(--line);background:var(--card);border-radius:15px;padding:13px;text-align:left;cursor:pointer}.cat-btn.active{outline:2px solid #aaa}.cat-btn b{display:block;font-size:13px}.cat-btn span{font-size:11px;color:var(--muted)}.setting{padding:15px;display:flex;justify-content:space-between;align-items:center}.setting+.setting{border-top:1px solid var(--line)}.toggle{width:48px;height:28px;border:0;border-radius:20px;background:#d9dce0;padding:3px;cursor:pointer}.toggle i{display:block;width:22px;height:22px;background:white;border-radius:50%;transition:.2s}.toggle.on{background:#17191c}.toggle.on i{transform:translateX(20px)}.account-card{padding:15px}.account-head{display:flex;align-items:center;gap:11px}.account-icon{width:40px;height:40px;border-radius:12px;background:var(--soft);display:grid;place-items:center;font-size:19px}.account-head b{display:block;font-size:14px}.account-head span{display:block;color:var(--muted);font-size:11px;margin-top:3px;word-break:break-all}.account-status{margin-top:11px;padding:9px 11px;border-radius:11px;background:var(--soft);font-size:11px;color:var(--muted)}.account-actions{display:flex;gap:8px;margin-top:10px}.account-actions button{flex:1}.account-form{padding:0 15px 15px}.account-form .field{margin-bottom:10px}.account-form input{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;font:inherit;background:#fff}.account-buttons{display:flex;gap:8px;flex-wrap:wrap}.account-buttons button{flex:1;min-width:120px}.profile-footer{text-align:center;color:var(--muted);font-size:10px;padding:18px 0 4px}.reward-toast{position:fixed;left:50%;bottom:86px;transform:translate(-50%,18px);background:#17191c;color:#fff;padding:11px 15px;border-radius:999px;font-size:12px;font-weight:750;box-shadow:0 8px 30px #0003;opacity:0;pointer-events:none;transition:.25s;z-index:30;white-space:nowrap}.reward-toast.show{opacity:1;transform:translate(-50%,0)}@media(max-width:620px){.category-grid{grid-template-columns:1fr 1fr}.profile-summary-item{padding:10px 8px}.profile-summary-item b{font-size:16px}}
+  .profile-card{padding:18px;display:flex;align-items:center;gap:14px}.avatar{width:58px;height:58px;border-radius:18px;background:var(--soft);display:grid;place-items:center;font-size:27px}.profile-card h2{margin:0;font-size:18px}.profile-card p{margin:4px 0 0;color:var(--muted);font-size:12px}.profile-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.profile-summary-item{background:var(--soft);border-radius:13px;padding:11px}.profile-summary-item b{display:block;font-size:17px}.profile-summary-item span{display:block;color:var(--muted);font-size:10px;margin-top:3px}.category{display:inline-flex;align-items:center;gap:5px;background:var(--soft);border-radius:999px;padding:4px 8px;font-size:10px;color:var(--muted);margin-top:6px}.category-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.cat-btn{border:1px solid var(--line);background:var(--card);border-radius:15px;padding:13px;text-align:left;cursor:pointer}.cat-btn.active{outline:2px solid #aaa}.cat-btn b{display:block;font-size:13px}.cat-btn span{font-size:11px;color:var(--muted)}.setting{padding:15px;display:flex;justify-content:space-between;align-items:center}.setting+.setting{border-top:1px solid var(--line)}.toggle{width:48px;height:28px;border:0;border-radius:20px;background:#d9dce0;padding:3px;cursor:pointer}.toggle i{display:block;width:22px;height:22px;background:white;border-radius:50%;transition:.2s}.toggle.on{background:#17191c}.toggle.on i{transform:translateX(20px)}.account-card{padding:15px}.account-head{display:flex;align-items:center;gap:11px}.account-icon{width:40px;height:40px;border-radius:12px;background:var(--soft);display:grid;place-items:center;font-size:19px}.account-head b{display:block;font-size:14px}.account-head span{display:block;color:var(--muted);font-size:11px;margin-top:3px;word-break:break-all}.account-status{margin-top:11px;padding:9px 11px;border-radius:11px;background:var(--soft);font-size:11px;color:var(--muted)}.account-actions{display:flex;gap:8px;margin-top:10px}.account-actions button{flex:1}.account-form{padding:0 15px 15px}.account-form .field{margin-bottom:10px}.account-form input{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;font:inherit;background:#fff}.account-buttons{display:flex;gap:8px;flex-wrap:wrap}.account-buttons button{flex:1;min-width:120px}.profile-footer{text-align:center;color:var(--muted);font-size:10px;padding:18px 0 4px}.reward-toast{position:fixed;left:50%;bottom:86px;transform:translate(-50%,18px);background:#17191c;color:#fff;padding:11px 15px;border-radius:999px;font-size:12px;font-weight:750;box-shadow:0 8px 30px #0003;opacity:0;pointer-events:none;transition:.25s;z-index:30;white-space:nowrap}.reward-toast.show{opacity:1;transform:translate(-50%,0)}@media(max-width:620px){.category-grid{grid-template-columns:1fr 1fr}.profile-summary-item{padding:10px 8px}.profile-summary-item b{font-size:16px}}
 
-.pro-hero{background:linear-gradient(135deg,#17191c 0%,#332c45 100%);color:#fff;border-radius:22px;padding:22px;margin-bottom:14px;position:relative;overflow:hidden}
-.pro-hero:after{content:"✦";position:absolute;right:-8px;top:-18px;font-size:110px;opacity:.08}
-.pro-badge{display:inline-flex;background:#fff;color:#17191c;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:800;letter-spacing:.04em}
-.pro-hero h2{margin:12px 0 7px;font-size:25px}.pro-hero p{margin:0;color:#d8d9dc;font-size:13px;line-height:1.5}
-.pro-features{display:grid;gap:9px;margin-top:17px}.pro-feature{display:flex;align-items:center;gap:10px;font-size:13px}.pro-feature i{font-style:normal;width:30px;height:30px;border-radius:10px;background:#ffffff14;display:grid;place-items:center}
-.pro-price{display:flex;align-items:baseline;gap:5px;margin:20px 0 13px}.pro-price b{font-size:28px}.pro-price span{font-size:12px;color:#c7c8cc}
-.pro-cta{width:100%;border:0;border-radius:13px;padding:13px;background:#fff;color:#17191c;font:inherit;font-weight:750;cursor:pointer}
-.pro-note{text-align:center;font-size:11px;color:var(--muted);margin:9px 0 0}
-.pro-section{padding:16px}.pro-section h3{margin:0 0 8px;font-size:15px}.pro-section p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}
-.pro-link{width:100%;border:1px solid var(--line);background:#fff;border-radius:13px;padding:12px;font:inherit;cursor:pointer;margin-top:10px}
-.profile-pro{padding:14px 15px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(135deg,#17191c 0%,#332c45 100%);color:#fff}.profile-pro b{font-size:14px}.profile-pro span{display:block;color:#d8d9dc;font-size:11px;margin-top:3px}.profile-pro button{border:0;border-radius:11px;background:#fff;color:#17191c;padding:9px 12px;font:inherit;font-weight:700;cursor:pointer;white-space:nowrap}
-/* Habit Flow 2.0 */
-.habit-schedule{font-size:10px;color:var(--muted);margin-top:5px}
-.goal-card{padding:16px}.goal-top{display:flex;justify-content:space-between;align-items:center;gap:12px}.goal-top b{font-size:15px}.goal-progress{margin-top:12px}.goal-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:7px}.goal-meta strong{color:var(--text)}
-.achievement-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.achievement{padding:13px;border:1px solid var(--line);border-radius:15px;background:var(--card)}.achievement.locked{opacity:.45}.achievement-icon{font-size:23px}.achievement b{display:block;font-size:12px;margin-top:7px}.achievement span{display:block;font-size:10px;color:var(--muted);margin-top:3px}
-.theme-btn{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:12px;padding:9px 11px;cursor:pointer;font:inherit}
-.weekday-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.weekday-grid label{cursor:pointer;text-align:center}.weekday-grid input{display:none}.weekday-grid span{display:grid;place-items:center;height:36px;border-radius:10px;background:var(--soft);font-size:11px;color:var(--muted)}.weekday-grid input:checked+span{background:var(--accent);color:#fff}
-.level-card{padding:16px;background:linear-gradient(135deg,#17191c 0%,#332c45 100%);color:#fff}.level-head{display:flex;justify-content:space-between;align-items:center}.level-head b{font-size:17px}.level-xp{font-size:12px;color:#d8d9dc}.level-bar{height:9px;background:#ffffff18;border-radius:20px;overflow:hidden;margin-top:12px}.level-bar i{display:block;height:100%;background:#fff;border-radius:20px}.level-sub{font-size:10px;color:#cfd1d5;margin-top:7px}
-[data-theme="dark"]{--bg:#101114;--card:#181a1f;--text:#f2f3f5;--muted:#9da3ad;--line:#2a2d33;--soft:#23262c;--accent:#f2f3f5;--greenbg:#183b2a;--green:#71d39b;--red:#ff7373}
-[data-theme="dark"] .primary,[data-theme="dark"] .pro-cta,[data-theme="dark"] .profile-pro button{background:#f2f3f5;color:#101114}
-[data-theme="dark"] .field input,[data-theme="dark"] .field select,[data-theme="dark"] .account-form input{background:#181a1f;color:#f2f3f5}
-[data-theme="dark"] .bottom{background:#15171b}
-[data-theme="dark"] .stats-hero{background:linear-gradient(135deg,#090a0c 0%,#25202f 100%)}
-@media(max-width:620px){.achievement-grid{grid-template-columns:1fr 1fr}.weekday-grid{gap:4px}}
-</style>
+  .pro-hero{background:linear-gradient(135deg,#17191c 0%,#332c45 100%);color:#fff;border-radius:22px;padding:22px;margin-bottom:14px;position:relative;overflow:hidden}
+  .pro-hero:after{content:"✦";position:absolute;right:-8px;top:-18px;font-size:110px;opacity:.08}
+  .pro-badge{display:inline-flex;background:#fff;color:#17191c;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:800;letter-spacing:.04em}
+  .pro-hero h2{margin:12px 0 7px;font-size:25px}.pro-hero p{margin:0;color:#d8d9dc;font-size:13px;line-height:1.5}
+  .pro-features{display:grid;gap:9px;margin-top:17px}.pro-feature{display:flex;align-items:center;gap:10px;font-size:13px}.pro-feature i{font-style:normal;width:30px;height:30px;border-radius:10px;background:#ffffff14;display:grid;place-items:center}
+  .pro-price{display:flex;align-items:baseline;gap:5px;margin:20px 0 13px}.pro-price b{font-size:28px}.pro-price span{font-size:12px;color:#c7c8cc}
+  .pro-cta{width:100%;border:0;border-radius:13px;padding:13px;background:#fff;color:#17191c;font:inherit;font-weight:750;cursor:pointer}
+  .pro-note{text-align:center;font-size:11px;color:var(--muted);margin:9px 0 0}
+  .pro-section{padding:16px}.pro-section h3{margin:0 0 8px;font-size:15px}.pro-section p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}
+  .pro-link{width:100%;border:1px solid var(--line);background:#fff;border-radius:13px;padding:12px;font:inherit;cursor:pointer;margin-top:10px}
+  .profile-pro{padding:14px 15px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(135deg,#17191c 0%,#332c45 100%);color:#fff}.profile-pro b{font-size:14px}.profile-pro span{display:block;color:#d8d9dc;font-size:11px;margin-top:3px}.profile-pro button{border:0;border-radius:11px;background:#fff;color:#17191c;padding:9px 12px;font:inherit;font-weight:700;cursor:pointer;white-space:nowrap}
+  .habit-schedule{font-size:10px;color:var(--muted);margin-top:5px}
+  .goal-card{padding:16px}.goal-top{display:flex;justify-content:space-between;align-items:center;gap:12px}.goal-top b{font-size:15px}.goal-progress{margin-top:12px}.goal-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:7px}.goal-meta strong{color:var(--text)}
+  .achievement-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.achievement{padding:13px;border:1px solid var(--line);border-radius:15px;background:var(--card)}.achievement.locked{opacity:.45}.achievement-icon{font-size:23px}.achievement b{display:block;font-size:12px;margin-top:7px}.achievement span{display:block;font-size:10px;color:var(--muted);margin-top:3px}
+  .theme-btn{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:12px;padding:9px 11px;cursor:pointer;font:inherit}
+  .weekday-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.weekday-grid label{cursor:pointer;text-align:center}.weekday-grid input{display:none}.weekday-grid span{display:grid;place-items:center;height:36px;border-radius:10px;background:var(--soft);font-size:11px;color:var(--muted)}.weekday-grid input:checked+span{background:var(--accent);color:#fff}
+  .level-card{padding:16px;background:linear-gradient(135deg,#17191c 0%,#332c45 100%);color:#fff}.level-head{display:flex;justify-content:space-between;align-items:center}.level-head b{font-size:17px}.level-xp{font-size:12px;color:#d8d9dc}.level-bar{height:9px;background:#ffffff18;border-radius:20px;overflow:hidden;margin-top:12px}.level-bar i{display:block;height:100%;background:#fff;border-radius:20px}.level-sub{font-size:10px;color:#cfd1d5;margin-top:7px}
+  [data-theme="dark"]{--bg:#101114;--card:#181a1f;--text:#f2f3f5;--muted:#9da3ad;--line:#2a2d33;--soft:#23262c;--accent:#f2f3f5;--greenbg:#183b2a;--green:#71d39b;--red:#ff7373}
+  [data-theme="dark"] .primary,[data-theme="dark"] .pro-cta,[data-theme="dark"] .profile-pro button{background:#f2f3f5;color:#101114}
+  [data-theme="dark"] .field input,[data-theme="dark"] .field select,[data-theme="dark"] .account-form input{background:#181a1f;color:#f2f3f5}
+  [data-theme="dark"] .bottom{background:#15171b}
+  [data-theme="dark"] .stats-hero{background:linear-gradient(135deg,#090a0c 0%,#25202f 100%)}
+  @media(max-width:620px){.achievement-grid{grid-template-columns:1fr 1fr}.weekday-grid{gap:4px}}
+  </style>
 </head>
 <body>
-<div id="rewardToast" class="reward-toast"></div><div class="app">
+<div id="rewardToast" class="reward-toast"></div>
+<div class="app">
   <header class="top">
     <div><div class="eyebrow">HABIT FLOW</div><h1 id="pageTitle">Сегодня</h1></div>
     <div style="display:flex;gap:7px;align-items:center"><button class="theme-btn" onclick="toggleTheme()" aria-label="Переключить тему">🌙</button><button class="primary" onclick="openModal()">＋ Привычка</button></div>
@@ -114,88 +114,90 @@
     </div>
   </section>
 
-
-<section id="pro" class="view">
-  <div class="pro-hero">
-    <span class="pro-badge">HABIT FLOW PRO</span>
-    <h2>Больше возможностей для твоих привычек</h2>
-    <p>Сделай трекер удобнее и получай больше от своего прогресса.</p>
-    <div class="pro-features">
-      <div class="pro-feature"><i>🔥</i><span><b>Неограниченные привычки</b></span></div>
-      <div class="pro-feature"><i>📊</i><span><b>Расширенная статистика</b></span></div>
-      <div class="pro-feature"><i>⏰</i><span><b>Несколько напоминаний</b></span></div>
+  <section id="pro" class="view">
+    <div class="pro-hero">
+      <span class="pro-badge">HABIT FLOW PRO</span>
+      <h2>Больше возможностей для твоих привычек</h2>
+      <p>Сделай трекер удобнее и получай больше от своего прогресса.</p>
+      <div class="pro-features">
+        <div class="pro-feature"><i>🔥</i><span><b>Неограниченные привычки</b></span></div>
+        <div class="pro-feature"><i>📊</i><span><b>Расширенная статистика</b></span></div>
+        <div class="pro-feature"><i>⏰</i><span><b>Несколько напоминаний</b></span></div>
+      </div>
+      <div class="pro-price"><b>$2.99</b><span>в месяц</span></div>
+      <button class="pro-cta" onclick="alert('Оплата Pro будет подключена следующим шагом.')">Попробовать Pro</button>
+      <div class="pro-note">Оплата пока не подключена</div>
     </div>
-    <div class="pro-price"><b>$2.99</b><span>в месяц</span></div>
-    <button class="pro-cta" onclick="alert('Оплата Pro будет подключена следующим шагом.')">Попробовать Pro</button>
-    <div class="pro-note">Оплата пока не подключена</div>
-  </div>
-  <div class="card pro-section">
-    <h3>Почему Pro?</h3>
-    <p>Все основные функции Habit Flow остаются доступными бесплатно. Pro добавит расширенные возможности, когда мы подключим оплату.</p>
-  </div>
-</section>
-
-<section id="profile" class="view">
-  <div class="card profile-card"><div class="avatar">🔥</div><div><h2 id="profileName">Мой прогресс</h2><p id="profileSubtitle">Начни с одной привычки</p></div></div>
-  <div class="profile-summary">
-    <div class="profile-summary-item"><b id="profileStreak">0 🔥</b><span>лучшая серия</span></div>
-    <div class="profile-summary-item"><b id="profileDone">0</b><span>выполнений</span></div>
-    <div class="profile-summary-item"><b id="profileHabits">0</b><span>привычек</span></div>
-  </div>
-  <div class="card profile-pro" style="margin-top:10px"><div><b>★ Habit Flow Pro</b><span>Больше возможностей для твоих привычек</span></div><button onclick="switchView('pro',document.querySelector('[data-view=pro]'))">Открыть</button></div>
-  <div class="title-row"><h2>Мой уровень</h2><span class="muted">XP и достижения</span></div>
-  <div class="card level-card">
-    <div class="level-head"><b id="profileLevel">Уровень 1</b><span class="level-xp" id="profileXp">0 XP</span></div>
-    <div class="level-bar"><i id="profileXpFill" style="width:0%"></i></div>
-    <div class="level-sub" id="profileXpNext">До следующего уровня: 100 XP</div>
-  </div>
-  <div class="title-row"><h2>Достижения</h2><span class="muted" id="achievementCount">0/8</span></div>
-  <div class="achievement-grid" id="achievementGrid"></div>
-  <div class="title-row"><h2>Облако</h2></div>
-  <div class="card account-card">
-    <div class="account-head"><div class="account-icon">☁️</div><div><b>Облачная синхронизация</b><span id="accountEmailLabel">Аккаунт не подключён</span></div></div>
-    <div id="accountStatus" class="account-status">Войди или создай аккаунт, чтобы хранить прогресс на других устройствах.</div>
-    <div id="accountGuestForm" class="account-form" style="padding:12px 0 0">
-      <div class="field"><label for="accountEmail">Электронная почта</label><input id="accountEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>
-      <div class="field"><label for="accountPassword">Пароль (минимум 6 символов)</label><input id="accountPassword" type="password" autocomplete="current-password" placeholder="Пароль"></div>
-      <div class="account-buttons"><button class="primary" onclick="loginAccount(false)">Войти</button><button class="ghost" onclick="loginAccount(true)">Создать аккаунт</button></div>
+    <div class="card pro-section">
+      <h3>Почему Pro?</h3>
+      <p>Все основные функции Habit Flow остаются доступными бесплатно. Pro добавит расширенные возможности, когда мы подключим оплату.</p>
     </div>
-    <div id="accountLoggedIn" style="display:none"><div class="account-actions"><button class="ghost" onclick="logoutAccount()">Выйти</button></div></div>
-  </div>
-  <div class="title-row"><h2>Цель месяца</h2><span class="muted">все привычки</span></div>
-  <div class="card goal-card"><div class="goal-top"><b>Выполнить привычки 80 раз</b><span id="goalPercent">0%</span></div><div class="goal-progress"><div class="goal-meta"><span id="goalCount">0 / 80</span><strong>🎯</strong></div><div class="bar"><div id="goalFill" class="fill" style="width:0%"></div></div></div></div>
-  <div class="title-row"><h2>Категории</h2><span class="muted">организуй привычки</span></div>
-  <div class="category-grid" id="categoryGrid"></div>
-  <div class="title-row"><h2>Настройки</h2></div>
-  <div class="card">
-    <div class="setting"><div><b>Ежедневное напоминание</b><div class="muted">Показывать уведомление о привычках</div></div><button id="notifyToggle" class="toggle" onclick="toggleNotifications()"><i></i></button></div>
-    <div class="setting"><div><b>Время напоминания</b><div class="muted">Когда напоминать</div></div><input id="notifyTime" type="time" value="20:00" style="width:105px;padding:8px" onchange="saveSettings()"></div>
-    <div class="setting"><div><b>Экспорт данных</b><div class="muted">Сохранить резервную копию</div></div><button class="small" onclick="exportData()">Скачать</button></div>
-  </div>
-  <div class="title-row"><h2>Опасная зона</h2></div>
-  <div class="card"><div class="setting"><div><b>Сбросить всё</b><div class="muted">Удалить все привычки и историю</div></div><button class="small danger" onclick="resetAll()">Сбросить</button></div></div>
-  <div class="profile-footer">Habit Flow · версия 1.0</div>
-</section>
+  </section>
+
+  <section id="profile" class="view">
+    <div class="card profile-card"><div class="avatar">🔥</div><div><h2 id="profileName">Мой прогресс</h2><p id="profileSubtitle">Начни с одной привычки</p></div></div>
+    <div class="profile-summary">
+      <div class="profile-summary-item"><b id="profileStreak">0 🔥</b><span>лучшая серия</span></div>
+      <div class="profile-summary-item"><b id="profileDone">0</b><span>выполнений</span></div>
+      <div class="profile-summary-item"><b id="profileHabits">0</b><span>привычек</span></div>
+    </div>
+    <div class="card profile-pro" style="margin-top:10px"><div><b>★ Habit Flow Pro</b><span>Больше возможностей для твоих привычек</span></div><button onclick="switchView('pro',document.querySelector('[data-view=pro]'))">Открыть</button></div>
+    <div class="title-row"><h2>Мой уровень</h2><span class="muted">XP и достижения</span></div>
+    <div class="card level-card">
+      <div class="level-head"><b id="profileLevel">Уровень 1</b><span class="level-xp" id="profileXp">0 XP</span></div>
+      <div class="level-bar"><i id="profileXpFill" style="width:0%"></i></div>
+      <div class="level-sub" id="profileXpNext">До следующего уровня: 100 XP</div>
+    </div>
+    <div class="title-row"><h2>Достижения</h2><span class="muted" id="achievementCount">0/8</span></div>
+    <div class="achievement-grid" id="achievementGrid"></div>
+    <div class="title-row"><h2>Облако</h2></div>
+    <div class="card account-card">
+      <div class="account-head"><div class="account-icon">☁️</div><div><b>Облачная синхронизация</b><span id="accountEmailLabel">Аккаунт не подключён</span></div></div>
+      <div id="accountStatus" class="account-status">Войди или создай аккаунт, чтобы хранить прогресс на других устройствах.</div>
+      <div id="accountGuestForm" class="account-form" style="padding:12px 0 0">
+        <div class="field"><label for="accountEmail">Электронная почта</label><input id="accountEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>
+        <div class="field"><label for="accountPassword">Пароль (минимум 6 символов)</label><input id="accountPassword" type="password" autocomplete="current-password" placeholder="Пароль"></div>
+        <div class="account-buttons"><button class="primary" onclick="loginAccount(false)">Войти</button><button class="ghost" onclick="loginAccount(true)">Создать аккаунт</button></div>
+      </div>
+      <div id="accountLoggedIn" style="display:none"><div class="account-actions"><button class="ghost" onclick="logoutAccount()">Выйти</button></div></div>
+    </div>
+    <div class="title-row"><h2>Цель месяца</h2><span class="muted">все привычки</span></div>
+    <div class="card goal-card"><div class="goal-top"><b>Выполнить привычки 80 раз</b><span id="goalPercent">0%</span></div><div class="goal-progress"><div class="goal-meta"><span id="goalCount">0 / 80</span><strong>🎯</strong></div><div class="bar"><div id="goalFill" class="fill" style="width:0%"></div></div></div></div>
+    <div class="title-row"><h2>Категории</h2><span class="muted">организуй привычки</span></div>
+    <div class="category-grid" id="categoryGrid"></div>
+    <div class="title-row"><h2>Настройки</h2></div>
+    <div class="card">
+      <div class="setting"><div><b>Ежедневное напоминание</b><div class="muted">Показывать уведомление о привычках</div></div><button id="notifyToggle" class="toggle" onclick="toggleNotifications()"><i></i></button></div>
+      <div class="setting"><div><b>Время напоминания</b><div class="muted">Когда напоминать</div></div><input id="notifyTime" type="time" value="20:00" style="width:105px;padding:8px" onchange="saveSettings()"></div>
+      <div class="setting"><div><b>Экспорт данных</b><div class="muted">Сохранить резервную копию</div></div><button class="small" onclick="exportData()">Скачать</button></div>
+    </div>
+    <div class="title-row"><h2>Опасная зона</h2></div>
+    <div class="card"><div class="setting"><div><b>Сбросить всё</b><div class="muted">Удалить все привычки и историю</div></div><button class="small danger" onclick="resetAll()">Сбросить</button></div></div>
+    <div class="profile-footer">Habit Flow · версия 1.0</div>
+  </section>
 </div>
 
 <nav class="bottom"><div class="nav">
-<button class="active" data-view="home" onclick="switchView('home',this)">⌂<br><small>Сегодня</small></button>
-<button data-view="calendar" onclick="switchView('calendar',this)">▦<br><small>Календарь</small></button>
-<button data-view="stats" onclick="switchView('stats',this)">◔<br><small>Статистика</small></button>
-<button data-view="profile" onclick="switchView('profile',this)">◎<br><small>Профиль</small></button>
+  <button class="active" data-view="home" onclick="switchView('home',this)">⌂<br><small>Сегодня</small></button>
+  <button data-view="calendar" onclick="switchView('calendar',this)">▦<br><small>Календарь</small></button>
+  <button data-view="stats" onclick="switchView('stats',this)">◔<br><small>Статистика</small></button>
+  <button data-view="profile" onclick="switchView('profile',this)">◎<br><small>Профиль</small></button>
 </div></nav>
 
 <div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
-<div class="modal">
-<h2 id="modalTitle">Новая привычка</h2>
-<div class="field"><label>Название</label><input id="habitName" placeholder="Например, читать 20 минут"></div>
-<div class="field"><label>Иконка</label><select id="habitIcon"><option>💧</option><option>🏃</option><option>📚</option><option>🧘</option><option>💪</option><option>😴</option><option>🍎</option><option>🕌</option><option>💻</option><option>🧹</option></select></div>
-<div class="field"><label>Категория</label><select id="habitCategory"><option value="Здоровье">❤️ Здоровье</option><option value="Спорт">🏃 Спорт</option><option value="Учёба">📚 Учёба</option><option value="Духовное">🕌 Духовное</option><option value="Работа">💻 Работа</option><option value="Личное">✨ Личное</option></select></div><div class="field"><label>Расписание</label><select id="habitFrequency" onchange="toggleWeekdays()"><option value="daily">Каждый день</option><option value="weekdays">Будни</option><option value="weekends">Выходные</option><option value="custom">Выбранные дни</option></select></div>
-<div class="field" id="weekdayField" style="display:none"><label>Дни недели</label><div class="weekday-grid">
-<label><input class="weekday" type="checkbox" value="0"><span>Пн</span></label><label><input class="weekday" type="checkbox" value="1"><span>Вт</span></label><label><input class="weekday" type="checkbox" value="2"><span>Ср</span></label><label><input class="weekday" type="checkbox" value="3"><span>Чт</span></label><label><input class="weekday" type="checkbox" value="4"><span>Пт</span></label><label><input class="weekday" type="checkbox" value="5"><span>Сб</span></label><label><input class="weekday" type="checkbox" value="6"><span>Вс</span></label></div></div>
-<div class="field"><label>Напоминание</label><input id="habitReminder" type="time"></div>
-<div class="modal-actions"><button class="ghost" onclick="closeModal()">Отмена</button><button class="primary" onclick="saveHabit()">Сохранить</button></div>
-</div></div>
+  <div class="modal">
+    <h2 id="modalTitle">Новая привычка</h2>
+    <div class="field"><label>Название</label><input id="habitName" placeholder="Например, читать 20 минут"></div>
+    <div class="field"><label>Иконка</label><select id="habitIcon"><option>💧</option><option>🏃</option><option>📚</option><option>🧘</option><option>💪</option><option>😴</option><option>🍎</option><option>🕌</option><option>💻</option><option>🧹</option></select></div>
+    <div class="field"><label>Категория</label><select id="habitCategory"><option value="Здоровье">❤️ Здоровье</option><option value="Спорт">🏃 Спорт</option><option value="Учёба">📚 Учёба</option><option value="Духовное">🕌 Духовное</option><option value="Работа">💻 Работа</option><option value="Личное">✨ Личное</option></select></div>
+    <div class="field"><label>Расписание</label><select id="habitFrequency" onchange="toggleWeekdays()"><option value="daily">Каждый день</option><option value="weekdays">Будни</option><option value="weekends">Выходные</option><option value="custom">Выбранные дни</option></select></div>
+    <div class="field" id="weekdayField" style="display:none"><label>Дни недели</label><div class="weekday-grid">
+      <label><input class="weekday" type="checkbox" value="0"><span>Пн</span></label><label><input class="weekday" type="checkbox" value="1"><span>Вт</span></label><label><input class="weekday" type="checkbox" value="2"><span>Ср</span></label><label><input class="weekday" type="checkbox" value="3"><span>Чт</span></label><label><input class="weekday" type="checkbox" value="4"><span>Пт</span></label><label><input class="weekday" type="checkbox" value="5"><span>Сб</span></label><label><input class="weekday" type="checkbox" value="6"><span>Вс</span></label>
+    </div></div>
+    <div class="field"><label>Напоминание</label><input id="habitReminder" type="time"></div>
+    <div class="modal-actions"><button class="ghost" onclick="closeModal()">Отмена</button><button class="primary" onclick="saveHabit()">Сохранить</button></div>
+  </div>
+</div>
 
 <script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-auth-compat.js"></script>
@@ -203,208 +205,515 @@
 <script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-messaging-compat.js"></script>
 <script src="./firebase-config.js?v=3"></script>
 <script>
-const KEY="habit-tracker-v2";
-let data=JSON.parse(localStorage.getItem(KEY)||localStorage.getItem("habit-tracker-v1")||'{"habits":[]}');
-data.habits.forEach(h=>{if(!h.category)h.category='Личное'});
-data.settings=data.settings||{notifications:false,time:'20:00'};
-let editingId=null, monthCursor=new Date(), selectedDate=new Date();
+const KEY = "habit-tracker-v2";
+let data = JSON.parse(localStorage.getItem(KEY) || localStorage.getItem("habit-tracker-v1") || '{"habits":[]}');
+if (!Array.isArray(data.habits)) data.habits = [];
+data.habits.forEach(h => { if (!h.category) h.category = 'Личное'; });
+data.settings = data.settings || { notifications: false, time: '20:00' };
 
-const key=d=>{let x=new Date(d);return new Date(x.getTime()-x.getTimezoneOffset()*60000).toISOString().slice(0,10)};
-const todayKey=()=>key(new Date());
-const fmt=d=>new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'long'}).format(d);
-let currentUser=null,cloudBusy=false,cloudSaveQueue=Promise.resolve();
-let pushForegroundListenerBound=false;
-function bindForegroundPushListener(){
- if(pushForegroundListenerBound || !data.settings.notifications || !("Notification" in window)) return;
- try{
-  if(!firebase.apps.length)firebase.initializeApp(window.HABIT_FIREBASE_CONFIG);
-  firebase.messaging().onMessage(payload=>{
-   const d=payload&&payload.data?payload.data:{};
-   const title=d.title||(payload&&payload.notification&&payload.notification.title)||"Habit Flow";
-   const body=d.body||(payload&&payload.notification&&payload.notification.body)||"Время проверить свои привычки 🔥";
-   if(Notification.permission==="granted"){
-    new Notification(title,{body,icon:"./icon-192.png",tag:"habit-flow-daily",renotify:false});
-   }
+let editingId = null, monthCursor = new Date(), selectedDate = new Date();
+
+const key = d => { let x = new Date(d); return new Date(x.getTime() - x.getTimezoneOffset() * 60000).toISOString().slice(0, 10); };
+const todayKey = () => key(new Date());
+const fmt = d => new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'long' }).format(d);
+
+let currentUser = null, cloudBusy = false, cloudSaveQueue = Promise.resolve();
+let pushForegroundListenerBound = false;
+
+function ensureFirebase() {
+  if (typeof firebase !== 'undefined' && !firebase.apps.length && window.HABIT_FIREBASE_CONFIG) {
+    firebase.initializeApp(window.HABIT_FIREBASE_CONFIG);
+  }
+  return (typeof firebase !== 'undefined' && firebase.apps.length) ? firebase.auth() : null;
+}
+
+function bindForegroundPushListener() {
+  if (pushForegroundListenerBound || !data.settings.notifications || !("Notification" in window)) return;
+  try {
+    ensureFirebase();
+    firebase.messaging().onMessage(payload => {
+      const d = payload && payload.data ? payload.data : {};
+      const title = d.title || (payload && payload.notification && payload.notification.title) || "Habit Flow";
+      const body = d.body || (payload && payload.notification && payload.notification.body) || "Время проверить свои привычки 🔥";
+      if (Notification.permission === "granted") {
+        new Notification(title, { body, icon: "./icon-192.png", tag: "habit-flow-daily", renotify: false });
+      }
+    });
+    pushForegroundListenerBound = true;
+  } catch (e) {
+    console.error("Foreground push listener failed", e);
+  }
+}
+
+function save() {
+  localStorage.setItem(KEY, JSON.stringify(data));
+  renderAll();
+  if (data.settings.notifications && data.settings.fcmToken) {
+    syncPushSettings().catch(e => console.error("Push sync failed", e));
+  }
+  if (currentUser && !currentUser.isAnonymous && !cloudBusy) {
+    queueCloudSave();
+  }
+}
+
+function queueCloudSave() {
+  if (!currentUser || currentUser.isAnonymous || cloudBusy) return;
+  const snapshot = JSON.parse(JSON.stringify(data)), uid = currentUser.uid;
+  cloudSaveQueue = cloudSaveQueue.then(() =>
+    firebase.firestore().collection('users').doc(uid).collection('tracker').doc('data').set({
+      ...snapshot,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    })
+  ).catch(e => {
+    console.error('Cloud save failed', e);
+    setAccountStatus('Не удалось сохранить в облако. Проверь интернет; локальная копия сохранена.');
   });
-  pushForegroundListenerBound=true;
- }catch(e){console.error("Foreground push listener failed",e)}
 }
-function save(){
- localStorage.setItem(KEY,JSON.stringify(data));renderAll();
- if(data.settings.notifications&&data.settings.fcmToken)syncPushSettings().catch(e=>console.error("Push sync failed",e));
- if(currentUser&&!currentUser.isAnonymous&&!cloudBusy)queueCloudSave()
+
+function setAccountStatus(message) {
+  const el = document.getElementById('accountStatus');
+  if (el) el.textContent = message;
 }
-function ensureFirebase(){if(!firebase.apps.length)firebase.initializeApp(window.HABIT_FIREBASE_CONFIG);return firebase.auth()}
-function queueCloudSave(){
- if(!currentUser||currentUser.isAnonymous||cloudBusy)return;
- const snapshot=JSON.parse(JSON.stringify(data)),uid=currentUser.uid;
- cloudSaveQueue=cloudSaveQueue.then(()=>firebase.firestore().collection('users').doc(uid).collection('tracker').doc('data').set({...snapshot,updatedAt:firebase.firestore.FieldValue.serverTimestamp()})).catch(e=>{console.error('Cloud save failed',e);setAccountStatus('Не удалось сохранить в облако. Проверь интернет и правила Firestore; локальная копия на этом устройстве сохранена.')});
+
+async function loginAccount(create) {
+  const email = document.getElementById('accountEmail').value.trim();
+  const password = document.getElementById('accountPassword').value;
+  if (!email || !password) { alert('Введи электронную почту и пароль.'); return; }
+  if (password.length < 6) { alert('Пароль должен содержать не менее 6 символов.'); return; }
+  try {
+    const auth = ensureFirebase();
+    if (create) await auth.createUserWithEmailAndPassword(email, password);
+    else await auth.signInWithEmailAndPassword(email, password);
+    setAccountStatus('Вход выполнен. Загружаем твой прогресс…');
+  } catch (e) {
+    console.error(e);
+    alert('Ошибка входа: ' + (e.message || e.code));
+  }
 }
-function setAccountStatus(message){const el=document.getElementById('accountStatus');if(el)el.textContent=message}
-async function loginAccount(create){
- const email=document.getElementById('accountEmail').value.trim(),password=document.getElementById('accountPassword').value;
- if(!email||!password){alert('Введи электронную почту и пароль.');return}
- if(password.length<6){alert('Пароль должен содержать не менее 6 символов.');return}
- try{const auth=ensureFirebase();if(create)await auth.createUserWithEmailAndPassword(email,password);else await auth.signInWithEmailAndPassword(email,password);setAccountStatus('Вход выполнен. Загружаем твой прогресс…')}
- catch(e){console.error(e);const msgs={'auth/email-already-in-use':'Аккаунт с такой почтой уже существует. Нажми «Войти».','auth/invalid-email':'Проверь адрес электронной почты.','auth/weak-password':'Пароль слишком простой — используй минимум 6 символов.','auth/user-not-found':'Аккаунт не найден. Нажми «Создать аккаунт», если регистрируешься впервые.','auth/wrong-password':'Неверная почта или пароль.','auth/invalid-credential':'Неверная почта или пароль.','auth/operation-not-allowed':'В Firebase Console включи Authentication → Sign-in method → Email/Password.'};alert(msgs[e.code]||('Не удалось выполнить вход: '+(e.message||e.code)))}
+
+async function logoutAccount() {
+  try {
+    if (data.settings.notifications) {
+      data.settings.notifications = false;
+      try { await syncPushSettings(); } catch (e) {}
+    }
+    save();
+    const auth = ensureFirebase();
+    if (auth) await auth.signOut();
+    setAccountStatus('Выход выполнен. Push-уведомления отключены.');
+  } catch (e) {
+    alert('Не удалось выйти из аккаунта.');
+  }
 }
-async function logoutAccount(){
- try{
-  if(data.settings.notifications){
-   data.settings.notifications=false;
-   try{await syncPushSettings()}catch(e){console.error('Push disable failed',e)}
+
+async function handleAuthState(user) {
+  currentUser = user;
+  const guestForm = document.getElementById('accountGuestForm');
+  const loggedIn = document.getElementById('accountLoggedIn');
+  const emailLabel = document.getElementById('accountEmailLabel');
+  if (!user || user.isAnonymous) {
+    if (guestForm) guestForm.style.display = 'block';
+    if (loggedIn) loggedIn.style.display = 'none';
+    if (emailLabel) emailLabel.textContent = 'Аккаунт не подключён';
+    setAccountStatus('Войди или создай аккаунт, чтобы хранить прогресс на других устройствах.');
+    return;
+  }
+  if (guestForm) guestForm.style.display = 'none';
+  if (loggedIn) loggedIn.style.display = 'block';
+  if (emailLabel) emailLabel.textContent = user.email || 'Аккаунт подключён';
+  setAccountStatus('Синхронизация включена');
+  cloudBusy = true;
+  try {
+    const ref = firebase.firestore().collection('users').doc(user.uid).collection('tracker').doc('data');
+    const snap = await ref.get();
+    if (snap.exists) {
+      const remote = snap.data();
+      delete remote.updatedAt;
+      data = { habits: Array.isArray(remote.habits) ? remote.habits : [], settings: remote.settings || { notifications: false, time: '20:00' } };
+      data.habits.forEach(h => { if (!h.category) h.category = 'Личное'; });
+      localStorage.setItem(KEY, JSON.stringify(data));
+      renderAll();
+      setAccountStatus('Синхронизация включена · ' + (user.email || 'аккаунт'));
+    } else {
+      await ref.set({ ...JSON.parse(JSON.stringify(data)), updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+      setAccountStatus('Текущий прогресс сохранён в облаке · ' + (user.email || 'аккаунт'));
+    }
+  } catch (e) {
+    console.error('Cloud load failed', e);
+  } finally {
+    cloudBusy = false;
+  }
+}
+
+function esc(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[c]));
+}
+
+function done(h, k = todayKey()) {
+  return !!(h.done && h.done[k]);
+}
+
+function streak(h) {
+  let d = new Date(), n = 0;
+  while (done(h, key(d))) { n++; d.setDate(d.getDate() - 1); }
+  return n;
+}
+
+function best(h) {
+  let dates = Object.keys(h.done || {}).filter(k => h.done[k]).sort();
+  let max = 0, cur = 0, prev = null;
+  for (const x of dates) {
+    if (prev) {
+      let a = new Date(prev), b = new Date(x);
+      if ((b - a) / 86400000 !== 1) cur = 0;
+    }
+    cur++; max = Math.max(max, cur); prev = x;
+  }
+  return max;
+}
+
+function openModal(id = null) {
+  editingId = id;
+  const h = id && data.habits.find(x => x.id === id);
+  document.getElementById('modalTitle').textContent = h ? 'Редактировать привычку' : 'Новая привычка';
+  document.getElementById('habitName').value = h ? h.name : '';
+  document.getElementById('habitIcon').value = h ? h.icon : '💧';
+  document.getElementById('habitCategory').value = h ? (h.category || 'Личное') : 'Личное';
+  document.getElementById('habitFrequency').value = h ? (h.frequency || 'daily') : 'daily';
+  document.getElementById('habitReminder').value = h ? (h.reminder || '') : '';
+  document.querySelectorAll('.weekday').forEach(x => x.checked = !!(h && Array.isArray(h.weekdays) && h.weekdays.includes(+x.value)));
+  toggleWeekdays();
+  document.getElementById('overlay').classList.add('show');
+  setTimeout(() => document.getElementById('habitName').focus(), 30);
+}
+
+function closeModal() {
+  document.getElementById('overlay').classList.remove('show');
+  editingId = null;
+}
+
+function toggleWeekdays() {
+  const f = document.getElementById('habitFrequency'), box = document.getElementById('weekdayField');
+  if (f && box) box.style.display = f.value === 'custom' ? 'block' : 'none';
+}
+
+function isScheduled(h, k = todayKey()) {
+  const d = new Date(k + 'T12:00:00'), day = (d.getDay() + 6) % 7, f = h.frequency || 'daily';
+  return f === 'daily' || (f === 'weekdays' && day < 5) || (f === 'weekends' && day >= 5) || (f === 'custom' && (h.weekdays || []).includes(day));
+}
+
+function scheduleLabel(h) {
+  const f = h.frequency || 'daily', names = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+  let s = f === 'daily' ? 'каждый день' : f === 'weekdays' ? 'будни' : f === 'weekends' ? 'выходные' : (h.weekdays || []).map(i => names[i]).join(', ') || 'выбранные дни';
+  return h.reminder ? s + ' · ' + h.reminder : s;
+}
+
+function totalXp() {
+  return data.habits.reduce((s, h) => s + Object.values(h.done || {}).filter(Boolean).length * 10, 0);
+}
+
+function achievements() {
+  const xp = totalXp(), total = data.habits.reduce((s, h) => s + Object.values(h.done || {}).filter(Boolean).length, 0);
+  const bestStreak = data.habits.length ? Math.max(...data.habits.map(best)) : 0;
+  return [
+    ['🚀', 'Первая привычка', data.habits.length >= 1],
+    ['🔥', '7 дней подряд', bestStreak >= 7],
+    ['💎', '30 дней подряд', bestStreak >= 30],
+    ['💯', '10 выполнений', total >= 10],
+    ['🏆', '50 выполнений', total >= 50],
+    ['👑', '100 выполнений', total >= 100],
+    ['⭐', '500 XP', xp >= 500],
+    ['🌟', '1000 XP', xp >= 1000]
+  ];
+}
+
+function renderAchievements() {
+  const a = achievements(), unlocked = a.filter(x => x[2]).length;
+  document.getElementById('achievementCount').textContent = unlocked + '/' + a.length;
+  document.getElementById('achievementGrid').innerHTML = a.map(x => '<div class="achievement ' + (x[2] ? '' : 'locked') + '"><div class="achievement-icon">' + x[0] + '</div><b>' + x[1] + '</b><span>' + (x[2] ? 'Получено' : 'Пока закрыто') + '</span></div>').join('');
+}
+
+function renderGoal() {
+  const n = data.habits.reduce((s, h) => s + Object.values(h.done || {}).filter(Boolean).length, 0), target = 80, p = Math.min(100, Math.round(n / target * 100));
+  document.getElementById('goalCount').textContent = n + ' / ' + target;
+  document.getElementById('goalPercent').textContent = p + '%';
+  document.getElementById('goalFill').style.width = p + '%';
+}
+
+function renderLevel() {
+  const xp = totalXp(), level = Math.floor(xp / 100) + 1, inside = xp % 100;
+  document.getElementById('profileLevel').textContent = 'Уровень ' + level;
+  document.getElementById('profileXp').textContent = xp + ' XP';
+  document.getElementById('profileXpFill').style.width = inside + '%';
+  document.getElementById('profileXpNext').textContent = 'До следующего уровня: ' + (100 - inside) + ' XP';
+}
+
+function toggleTheme() {
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', dark ? 'light' : 'dark');
+  localStorage.setItem('habit-flow-theme', dark ? 'light' : 'dark');
+  document.querySelector('.theme-btn').textContent = dark ? '🌙' : '☀️';
+}
+
+function initTheme() {
+  const saved = localStorage.getItem('habit-flow-theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+  const b = document.querySelector('.theme-btn');
+  if (b) b.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙';
+}
+
+function saveHabit() {
+  const name = document.getElementById('habitName').value.trim();
+  if (!name) return;
+  if (editingId) {
+    let h = data.habits.find(x => x.id === editingId);
+    if (h) {
+      h.name = name;
+      h.icon = document.getElementById('habitIcon').value;
+      h.category = document.getElementById('habitCategory').value;
+      h.frequency = document.getElementById('habitFrequency').value;
+      h.reminder = document.getElementById('habitReminder').value;
+      h.weekdays = [...document.querySelectorAll('.weekday:checked')].map(x => +x.value);
+    }
+  } else {
+    data.habits.push({
+      id: Date.now(),
+      name,
+      icon: document.getElementById('habitIcon').value,
+      category: document.getElementById('habitCategory').value,
+      frequency: document.getElementById('habitFrequency').value,
+      reminder: document.getElementById('habitReminder').value,
+      weekdays: [...document.querySelectorAll('.weekday:checked')].map(x => +x.value),
+      done: {}
+    });
+  }
+  closeModal();
+  save();
+}
+
+function showReward(message) {
+  const el = document.getElementById('rewardToast');
+  if (!el) return;
+  el.textContent = message;
+  el.classList.add('show');
+  clearTimeout(window.rewardTimer);
+  window.rewardTimer = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+function toggle(id, k = todayKey()) {
+  const h = data.habits.find(x => x.id === id);
+  if (!h) return;
+  if (!isScheduled(h, k)) { showReward('Сегодня эта привычка не запланирована'); return; }
+  if (!h.done) h.done = {};
+  const wasDone = done(h, k);
+  h.done[k] = !wasDone;
+  if (!wasDone) {
+    const s = streak(h);
+    showReward('+10 XP ✨  ' + h.name + ' · серия ' + s + ' 🔥');
+    if ([7, 30, 100].includes(s)) setTimeout(() => showReward('🏆 Новая серия: ' + s + ' дней!'), 500);
   }
   save();
-  await ensureFirebase().signOut();
-  setAccountStatus('Выход выполнен. Push-уведомления отключены, локальная копия привычек сохранена.');
- }catch(e){alert('Не удалось выйти из аккаунта.')}
-}
-async function handleAuthState(user){
- currentUser=user;
- const guestForm=document.getElementById('accountGuestForm'),loggedIn=document.getElementById('accountLoggedIn'),emailLabel=document.getElementById('accountEmailLabel');
- if(!user||user.isAnonymous){
-  if(guestForm)guestForm.style.display='block';
-  if(loggedIn)loggedIn.style.display='none';
-  if(emailLabel)emailLabel.textContent='Аккаунт не подключён';
-  setAccountStatus('Войди или создай аккаунт, чтобы хранить прогресс на других устройствах.');
-  return
- }
- if(guestForm)guestForm.style.display='none';
- if(loggedIn)loggedIn.style.display='block';
- if(emailLabel)emailLabel.textContent=user.email||'Аккаунт подключён';
- setAccountStatus('Синхронизация включена');
- cloudBusy=true;
- try{
-  const ref=firebase.firestore().collection('users').doc(user.uid).collection('tracker').doc('data');
-  const snap=await ref.get();
-  if(snap.exists){const remote=snap.data();delete remote.updatedAt;data={habits:Array.isArray(remote.habits)?remote.habits:[],settings:remote.settings||{notifications:false,time:'20:00'}};data.habits.forEach(h=>{if(!h.category)h.category='Личное'});localStorage.setItem(KEY,JSON.stringify(data));renderAll();setAccountStatus('Синхронизация включена · '+(user.email||'аккаунт'))}
-  else{await ref.set({...JSON.parse(JSON.stringify(data)),updatedAt:firebase.firestore.FieldValue.serverTimestamp()});setAccountStatus('Текущий прогресс сохранён в облаке · '+(user.email||'аккаунт'))}
- }catch(e){console.error('Cloud load failed',e);setAccountStatus('Не удалось подключиться к облаку. Проверь правила Firestore и подключение к интернету.')}
- finally{cloudBusy=false}
-}
-function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
-function done(h,k){return !!h.done[k]}
-function streak(h){let d=new Date(),n=0;while(done(h,key(d))){n++;d.setDate(d.getDate()-1)}return n}
-function best(h){let dates=Object.keys(h.done).filter(k=>h.done[k]).sort();let max=0,cur=0,prev=null;for(const x of dates){if(prev){let a=new Date(prev),b=new Date(x);if((b-a)/86400000!==1)cur=0}cur++;max=Math.max(max,cur);prev=x}return max}
-function openModal(id=null){
- editingId=id;
- const h=id&&data.habits.find(x=>x.id===id);
- document.getElementById('modalTitle').textContent=h?'Редактировать привычку':'Новая привычка';
- document.getElementById('habitName').value=h?h.name:'';
- document.getElementById('habitIcon').value=h?h.icon:'💧';
- document.getElementById('habitCategory').value=h?(h.category||'Личное'):'Личное';document.getElementById('habitFrequency').value=h?(h.frequency||'daily'):'daily';document.getElementById('habitReminder').value=h?(h.reminder||''):'';document.querySelectorAll('.weekday').forEach(x=>x.checked=!!(h&&Array.isArray(h.weekdays)&&h.weekdays.includes(+x.value)));toggleWeekdays();
- document.getElementById('overlay').classList.add('show');setTimeout(()=>document.getElementById('habitName').focus(),30)
-}
-function closeModal(){document.getElementById('overlay').classList.remove('show');editingId=null}
-function toggleWeekdays(){const f=document.getElementById('habitFrequency'),box=document.getElementById('weekdayField');if(f&&box)box.style.display=f.value==='custom'?'block':'none'}
-function isScheduled(h,k=todayKey()){const d=new Date(k+'T12:00:00'),day=(d.getDay()+6)%7,f=h.frequency||'daily';return f==='daily'||(f==='weekdays'&&day<5)||(f==='weekends'&&day>=5)||(f==='custom'&&(h.weekdays||[]).includes(day))}
-function scheduleLabel(h){const f=h.frequency||'daily', names=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];let s=f==='daily'?'каждый день':f==='weekdays'?'будни':f==='weekends'?'выходные':(h.weekdays||[]).map(i=>names[i]).join(', ')||'выбранные дни';return h.reminder?s+' · '+h.reminder:s}
-function totalXp(){return data.habits.reduce((s,h)=>s+Object.values(h.done||{}).filter(Boolean).length*10,0)}
-function achievements(){const xp=totalXp(),total=data.habits.reduce((s,h)=>s+Object.values(h.done||{}).filter(Boolean).length,0),bestStreak=data.habits.length?Math.max(...data.habits.map(best)):0;return[
-['🚀','Первая привычка',data.habits.length>=1],['🔥','7 дней подряд',bestStreak>=7],['💎','30 дней подряд',bestStreak>=30],['💯','10 выполнений',total>=10],['🏆','50 выполнений',total>=50],['👑','100 выполнений',total>=100],['⭐','500 XP',xp>=500],['🌟','1000 XP',xp>=1000]]}
-function renderAchievements(){const a=achievements(),unlocked=a.filter(x=>x[2]).length;document.getElementById('achievementCount').textContent=unlocked+'/'+a.length;document.getElementById('achievementGrid').innerHTML=a.map(x=>'<div class="achievement '+(x[2]?'':'locked')+'"><div class="achievement-icon">'+x[0]+'</div><b>'+x[1]+'</b><span>'+ (x[2]?'Получено':'Пока закрыто')+'</span></div>').join('')}
-function renderGoal(){const n=data.habits.reduce((s,h)=>s+Object.values(h.done||{}).filter(Boolean).length,0),target=80,p=Math.min(100,Math.round(n/target*100));document.getElementById('goalCount').textContent=n+' / '+target;document.getElementById('goalPercent').textContent=p+'%';document.getElementById('goalFill').style.width=p+'%'}
-function renderLevel(){const xp=totalXp(),level=Math.floor(xp/100)+1,inside=xp%100;document.getElementById('profileLevel').textContent='Уровень '+level;document.getElementById('profileXp').textContent=xp+' XP';document.getElementById('profileXpFill').style.width=inside+'%';document.getElementById('profileXpNext').textContent='До следующего уровня: '+(100-inside)+' XP'}
-function toggleTheme(){const dark=document.documentElement.getAttribute('data-theme')==='dark';document.documentElement.setAttribute('data-theme',dark?'light':'dark');localStorage.setItem('habit-flow-theme',dark?'light':'dark');document.querySelector('.theme-btn').textContent=dark?'🌙':'☀️'}
-function initTheme(){const saved=localStorage.getItem('habit-flow-theme');if(saved)document.documentElement.setAttribute('data-theme',saved);const b=document.querySelector('.theme-btn');if(b)b.textContent=document.documentElement.getAttribute('data-theme')==='dark'?'☀️':'🌙'}
-function saveHabit(){
- const name=document.getElementById('habitName').value.trim();if(!name)return;
- if(editingId){let h=data.habits.find(x=>x.id===editingId);h.name=name;h.icon=document.getElementById('habitIcon').value;h.category=document.getElementById('habitCategory').value;h.frequency=document.getElementById('habitFrequency').value;h.reminder=document.getElementById('habitReminder').value;h.weekdays=[...document.querySelectorAll('.weekday:checked')].map(x=>+x.value)}
- else data.habits.push({id:Date.now(),name,icon:document.getElementById('habitIcon').value,category:document.getElementById('habitCategory').value,frequency:document.getElementById('habitFrequency').value,reminder:document.getElementById('habitReminder').value,weekdays:[...document.querySelectorAll('.weekday:checked')].map(x=>+x.value),done:{}});
- closeModal();save()
-}
-function showReward(message){const el=document.getElementById('rewardToast');if(!el)return;el.textContent=message;el.classList.add('show');clearTimeout(window.rewardTimer);window.rewardTimer=setTimeout(()=>el.classList.remove('show'),2200)}
-function toggle(id,k=todayKey()){const h=data.habits.find(x=>x.id===id);if(!h)return;if(!isScheduled(h,k)){showReward('Сегодня эта привычка не запланирована');return}const wasDone=done(h,k);h.done[k]=!wasDone;if(!wasDone){const s=streak(h);showReward('+10 XP ✨  '+h.name+' · серия '+s+' 🔥');if([7,30,100].includes(s))setTimeout(()=>showReward('🏆 Новая серия: '+s+' дней!'),500)}save()}
-function removeHabit(id){if(confirm('Удалить привычку?')){data.habits=data.habits.filter(h=>h.id!==id);save()}}
-function switchView(v,btn){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById(v).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');document.getElementById('pageTitle').textContent=v==='home'?'Сегодня':v==='calendar'?'Календарь':v==='stats'?'Статистика':v==='pro'?'Habit Flow Pro':'Профиль';renderAll()}
-function renderHome(){
- const hs=data.habits, today=todayKey(), scheduled=hs.filter(h=>isScheduled(h,today)), d=scheduled.filter(h=>done(h,today)).length, total=hs.reduce((s,h)=>s+Object.values(h.done).filter(Boolean).length,0);
- const weekKeys=Array.from({length:7},(_,i)=>{let x=new Date();x.setDate(x.getDate()-i);return key(x)}),weekDone=weekKeys.reduce((s,k)=>s+hs.filter(h=>isScheduled(h,k)&&done(h,k)).length,0);
- document.getElementById('todayCount').textContent=`${d}/${scheduled.length}`;document.getElementById('bestStreak').textContent=(Math.max(0,...hs.map(best)))+' 🔥';document.getElementById('totalDone').textContent=total;document.getElementById('weekDone').textContent=weekDone;document.getElementById('dateText').textContent=fmt(new Date());
- let pct=scheduled.length?Math.round(d/scheduled.length*100):0;document.getElementById('progressText').textContent=pct+'%';document.getElementById('progressFill').style.width=pct+'%';
- const list=document.getElementById('habitList');
- list.innerHTML=scheduled.length?scheduled.map(h=>`<div class="habit ${done(h,today)?'done':''}"><div class="icon">${esc(h.icon||'✨')}</div><div class="info"><div class="name">${esc(h.name)}</div><div class="meta"><span class="streak">🔥 ${streak(h)}</span><span class="record">дней подряд · рекорд ${best(h)}</span></div><div class="category">${categoryIcon(h.category)} ${esc(h.category||'Личное')}</div><div class="habit-schedule">${esc(scheduleLabel(h))}</div></div><div class="actions"><button class="small edit" title="Редактировать" aria-label="Редактировать привычку" onclick="openModal(${h.id})">✎</button><button class="small delete danger" title="Удалить" aria-label="Удалить привычку" onclick="removeHabit(${h.id})">🗑</button><button class="check" aria-label="Отметить выполнение" onclick="toggle(${h.id})">${done(h,today)?'✓':'○'}</button></div></div>`).join(''):'<div class="empty">Пока нет привычек.<br>Добавь первую 🚀</div>';
- const w=document.getElementById('week');let base=new Date();base.setDate(base.getDate()-((base.getDay()+6)%7));
- w.innerHTML=Array.from({length:7},(_,i)=>{let x=new Date(base);x.setDate(base.getDate()+i);let k=key(x),n=hs.filter(h=>done(h,k)).length;return `<div class="day ${k===today?'today':''} ${n?'has':''}" onclick="goDay('${k}')"><small>${['Пн','Вт','Ср','Чт','Пт','Сб','Вс'][i]}</small><b>${x.getDate()}</b><i title="${n} выполнено"></i></div>`}).join('')
-}
-function goDay(k){selectedDate=new Date(k+'T12:00:00');switchView('calendar',document.querySelector('[data-view=calendar]'))}
-function changeMonth(n){monthCursor.setMonth(monthCursor.getMonth()+n);renderCalendar()}
-function renderCalendar(){
- const y=monthCursor.getFullYear(),m=monthCursor.getMonth();document.getElementById('monthName').textContent=new Intl.DateTimeFormat('ru-RU',{month:'long',year:'numeric'}).format(monthCursor);
- let first=new Date(y,m,1),offset=(first.getDay()+6)%7,days=new Date(y,m+1,0).getDate(),hs=data.habits,today=todayKey(),out=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].map(x=>`<div class="calhead">${x}</div>`).join('');
- for(let i=0;i<offset;i++)out+='<div></div>';
- for(let d=1;d<=days;d++){let x=new Date(y,m,d),k=key(x),n=hs.filter(h=>done(h,k)).length;out+=`<div class="calday ${n?'done':''} ${k===key(selectedDate)?'selected':''}" onclick="selectDay('${k}')">${d}<br><small>${n}/${hs.length}</small></div>`}
- document.getElementById('calgrid').innerHTML=out;renderDayDetails()
-}
-function selectDay(k){selectedDate=new Date(k+'T12:00:00');renderCalendar()}
-function renderDayDetails(){
- const k=key(selectedDate);document.getElementById('selectedDateTitle').textContent=fmt(selectedDate);
- const box=document.getElementById('dayDetails');box.innerHTML=data.habits.length?data.habits.map(h=>`<div class="habit ${done(h,k)?'done':''}"><div class="icon">${esc(h.icon||'✨')}</div><div class="info"><div class="name">${esc(h.name)}</div></div><button class="check" onclick="toggle(${h.id},'${k}')">${done(h,k)?'✓':'○'}</button></div>`).join(''):'<div class="empty">Добавь привычки, чтобы видеть историю.</div>'
-}
-function renderStats(){
- const hs=data.habits;let days=Array.from({length:7},(_,i)=>{let d=new Date();d.setDate(d.getDate()-(6-i));return d});let vals=days.map(d=>hs.filter(h=>done(h,key(d))).length),sum=vals.reduce((a,b)=>a+b,0),possible=hs.length*7;
- document.getElementById('sevenTotal').textContent=sum;document.getElementById('sevenAvg').textContent=(possible?Math.round(sum/possible*100):0)+'%';
- document.getElementById('barlist').innerHTML=days.map((d,i)=>{let pct=hs.length?Math.round(vals[i]/hs.length*100):0;return `<div class="barrow"><span>${new Intl.DateTimeFormat('ru-RU',{weekday:'short'}).format(d)}</span><div class="line"><i style="width:${pct}%"></i></div><b>${vals[i]}/${hs.length}</b></div>`}).join('');
- document.getElementById('habitStats').innerHTML=hs.length?hs.map(h=>{let n=days.filter(d=>done(h,key(d))).length;return `<div class="barrow habit-barrow"><span class="habit-stat-name">${esc(h.icon||'✨')} ${esc(h.name)}</span><div class="line"><i style="width:${n/7*100}%"></i></div><b>${n}/7</b></div>`}).join(''):'<div class="stats-empty">Добавь привычки — здесь появится твоя статистика.</div>'
 }
 
-function categoryIcon(c){return ({'Здоровье':'❤️','Спорт':'🏃','Учёба':'📚','Духовное':'🕌','Работа':'💻','Личное':'✨'}[c]||'✨')}
-function renderProfile(){
- const total=data.habits.length, completed=data.habits.reduce((s,h)=>s+Object.values(h.done).filter(Boolean).length,0), bestStreak=total?Math.max(...data.habits.map(best)):0;
- document.getElementById('profileName').textContent=total?`Мои привычки · ${total}`:'Мой прогресс';
- document.getElementById('profileSubtitle').textContent=completed?`${completed} выполнений — продолжай в том же духе`:'Начни с одной привычки';
- document.getElementById('profileStreak').textContent=bestStreak+' 🔥';document.getElementById('profileDone').textContent=completed;document.getElementById('profileHabits').textContent=total;
- const cats=['Здоровье','Спорт','Учёба','Духовное','Работа','Личное'];
- document.getElementById('categoryGrid').innerHTML=cats.map(c=>{let n=data.habits.filter(h=>h.category===c).length;return `<button class="cat-btn" onclick="filterCategory('${c}')"><b>${categoryIcon(c)} ${c}</b><span>${n} ${n===1?'привычка':'привычек'}</span></button>`}).join('');
- const t=document.getElementById('notifyToggle');t.classList.toggle('on',!!data.settings.notifications);document.getElementById('notifyTime').value=data.settings.time||'20:00';renderAchievements();renderGoal();renderLevel();
-}
-function filterCategory(c){
- switchView('home',document.querySelector('[data-view=home]'));
- const hs=data.habits.filter(h=>h.category===c);
- const list=document.getElementById('habitList');
- list.innerHTML=hs.length?hs.map(h=>`<div class="habit ${done(h)?'done':''}"><div class="icon">${esc(h.icon||'✨')}</div><div class="info"><div class="name">${esc(h.name)}</div><div class="meta">🔥 ${streak(h)} дней подряд</div><div class="category">${categoryIcon(h.category)} ${esc(h.category)}</div></div><div class="actions"><button class="small edit" title="Редактировать" aria-label="Редактировать привычку" onclick="openModal(${h.id})">✎</button><button class="small delete danger" title="Удалить" aria-label="Удалить привычку" onclick="removeHabit(${h.id})">🗑</button><button class="check" aria-label="Отметить выполнение" onclick="toggle(${h.id})">${done(h)?'✓':'○'}</button></div></div>`).join(''):`<div class="empty">В категории «${esc(c)}» пока нет привычек.</div>`;
-}
-async function saveSettings(){
- data.settings.time=document.getElementById('notifyTime').value;
- if(data.settings.notifications){try{await syncPushSettings()}catch(e){}}
- save()
-}
-async function toggleNotifications(){
-  if(data.settings.notifications){
-   data.settings.notifications=false;
-   try{await syncPushSettings()}catch(e){
-    console.error(e);data.settings.notifications=true;
-    alert('Не удалось отключить уведомления на сервере. Проверь подключение и URL Cloudflare Worker.');return;
-   }
-   save();return;
+function removeHabit(id) {
+  if (confirm('Удалить привычку?')) {
+    data.habits = data.habits.filter(h => h.id !== id);
+    save();
   }
-  if(!('Notification' in window)){alert('Этот браузер не поддерживает уведомления.');return}
-  if(!window.HABIT_PUSH_WORKER_URL || window.HABIT_PUSH_WORKER_URL.includes('YOUR-WORKER')){
-   alert('Сначала настрой Cloudflare Worker: открой README-CLOUDFLARE.md в архиве и укажи URL Worker в firebase-config.js.');return;
+}
+
+function switchView(v, btn) {
+  document.querySelectorAll('.view').forEach(x => x.classList.remove('active'));
+  const target = document.getElementById(v);
+  if (target) target.classList.add('active');
+  document.querySelectorAll('.nav button').forEach(x => x.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const title = document.getElementById('pageTitle');
+  if (title) title.textContent = v === 'home' ? 'Сегодня' : v === 'calendar' ? 'Календарь' : v === 'stats' ? 'Статистика' : v === 'pro' ? 'Habit Flow Pro' : 'Профиль';
+  renderAll();
+}
+
+function renderHome() {
+  const hs = data.habits, today = todayKey(), scheduled = hs.filter(h => isScheduled(h, today)), d = scheduled.filter(h => done(h, today)).length, total = hs.reduce((s, h) => s + Object.values(h.done || {}).filter(Boolean).length, 0);
+  const weekKeys = Array.from({length: 7}, (_, i) => { let x = new Date(); x.setDate(x.getDate() - i); return key(x); });
+  const weekDone = weekKeys.reduce((s, k) => s + hs.filter(h => isScheduled(h, k) && done(h, k)).length, 0);
+  
+  document.getElementById('todayCount').textContent = `${d}/${scheduled.length}`;
+  document.getElementById('bestStreak').textContent = (Math.max(0, ...hs.map(best))) + ' 🔥';
+  document.getElementById('totalDone').textContent = total;
+  document.getElementById('weekDone').textContent = weekDone;
+  document.getElementById('dateText').textContent = fmt(new Date());
+
+  let pct = scheduled.length ? Math.round(d / scheduled.length * 100) : 0;
+  document.getElementById('progressText').textContent = pct + '%';
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  const list = document.getElementById('habitList');
+  list.innerHTML = scheduled.length ? scheduled.map(h => `<div class="habit ${done(h, today) ? 'done' : ''}"><div class="icon">${esc(h.icon || '✨')}</div><div class="info"><div class="name">${esc(h.name)}</div><div class="meta"><span class="streak">🔥 ${streak(h)}</span><span class="record">дней подряд · рекорд ${best(h)}</span></div><div class="category">${categoryIcon(h.category)} ${esc(h.category || 'Личное')}</div><div class="habit-schedule">${esc(scheduleLabel(h))}</div></div><div class="actions"><button class="small edit" title="Редактировать" onclick="openModal(${h.id})">✎</button><button class="small delete danger" title="Удалить" onclick="removeHabit(${h.id})">🗑</button><button class="check" onclick="toggle(${h.id})">${done(h, today) ? '✓' : '○'}</button></div></div>`).join('') : '<div class="empty">Пока нет привычек.<br>Добавь первую 🚀</div>';
+
+  const w = document.getElementById('week');
+  let base = new Date(); base.setDate(base.getDate() - ((base.getDay() + 6) % 7));
+  w.innerHTML = Array.from({length: 7}, (_, i) => {
+    let x = new Date(base); x.setDate(base.getDate() + i);
+    let k = key(x), n = hs.filter(h => done(h, k)).length;
+    return `<div class="day ${k === today ? 'today' : ''} ${n ? 'has' : ''}" onclick="goDay('${k}')"><small>${['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'][i]}</small><b>${x.getDate()}</b><i title="${n} выполнено"></i></div>`;
+  }).join('');
+}
+
+function goDay(k) {
+  selectedDate = new Date(k + 'T12:00:00');
+  switchView('calendar', document.querySelector('[data-view=calendar]'));
+}
+
+function changeMonth(n) {
+  monthCursor.setMonth(monthCursor.getMonth() + n);
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const y = monthCursor.getFullYear(), m = monthCursor.getMonth();
+  document.getElementById('monthName').textContent = new Intl.DateTimeFormat('ru-RU', { month: 'long', year: 'numeric' }).format(monthCursor);
+  let first = new Date(y, m, 1), offset = (first.getDay() + 6) % 7, days = new Date(y, m + 1, 0).getDate(), hs = data.habits;
+  let out = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map(x => `<div class="calhead">${x}</div>`).join('');
+  for (let i = 0; i < offset; i++) out += '<div></div>';
+  for (let d = 1; d <= days; d++) {
+    let x = new Date(y, m, d), k = key(x), n = hs.filter(h => done(h, k)).length;
+    out += `<div class="calday ${n ? 'done' : ''} ${k === key(selectedDate) ? 'selected' : ''}" onclick="selectDay('${k}')">${d}<br><small>${n}/${hs.length}</small></div>`;
   }
-  try{
-   const p=await Notification.requestPermission();if(p!=='granted'){alert('Разрешение на уведомления не выдано.');return}
-   if(!firebase.apps.length)firebase.initializeApp(window.HABIT_FIREBASE_CONFIG);
-   const msg=firebase.messaging();
-   const sw=await navigator.serviceWorker.register('./firebase-messaging-sw.js?v=3');
-   const token=await msg.getToken({vapidKey:window.HABIT_VAPID_KEY,serviceWorkerRegistration:sw});
-   if(!token)throw new Error('FCM token не получен');
-   data.settings.notifications=true;data.settings.fcmToken=token;
-   data.settings.time=data.settings.time||'20:00';
-   data.settings.timezone=Intl.DateTimeFormat().resolvedOptions().timeZone||'UTC';
-   await syncPushSettings();
-   bindForegroundPushListener();
-   save();alert('Push-уведомления включены. Время: '+data.settings.time);
-  }catch(e){console.error(e);data.settings.notifications=false;save();alert('Не удалось подключить push. Проверь Firebase Authentication, разрешение уведомлений и настройки Cloudflare Worker. Подробности — в консоли браузера.')}
- }
- async function syncPushSettings() {
+  document.getElementById('calgrid').innerHTML = out;
+  renderDayDetails();
+}
+
+function selectDay(k) {
+  selectedDate = new Date(k + 'T12:00:00');
+  renderCalendar();
+}
+
+function renderDayDetails() {
+  const k = key(selectedDate);
+  document.getElementById('selectedDateTitle').textContent = fmt(selectedDate);
+  const box = document.getElementById('dayDetails');
+  box.innerHTML = data.habits.length ? data.habits.map(h => `<div class="habit ${done(h, k) ? 'done' : ''}"><div class="icon">${esc(h.icon || '✨')}</div><div class="info"><div class="name">${esc(h.name)}</div></div><button class="check" onclick="toggle(${h.id},'${k}')">${done(h, k) ? '✓' : '○'}</button></div>`).join('') : '<div class="empty">Добавь привычки, чтобы видеть историю.</div>';
+}
+
+function renderStats() {
+  const hs = data.habits;
+  let days = Array.from({length: 7}, (_, i) => { let d = new Date(); d.setDate(d.getDate() - (6 - i)); return d; });
+  let vals = days.map(d => hs.filter(h => done(h, key(d))).length), sum = vals.reduce((a, b) => a + b, 0), possible = hs.length * 7;
+  document.getElementById('sevenTotal').textContent = sum;
+  document.getElementById('sevenAvg').textContent = (possible ? Math.round(sum / possible * 100) : 0) + '%';
+  document.getElementById('barlist').innerHTML = days.map((d, i) => {
+    let pct = hs.length ? Math.round(vals[i] / hs.length * 100) : 0;
+    return `<div class="barrow"><span>${new Intl.DateTimeFormat('ru-RU', { weekday: 'short' }).format(d)}</span><div class="line"><i style="width:${pct}%"></i></div><b>${vals[i]}/${hs.length}</b></div>`;
+  }).join('');
+  document.getElementById('habitStats').innerHTML = hs.length ? hs.map(h => {
+    let n = days.filter(d => done(h, key(d))).length;
+    return `<div class="barrow habit-barrow"><span class="habit-stat-name">${esc(h.icon || '✨')} ${esc(h.name)}</span><div class="line"><i style="width:${n / 7 * 100}%"></i></div><b>${n}/7</b></div>`;
+  }).join('') : '<div class="stats-empty">Добавь привычки — здесь появится твоя статистика.</div>';
+}
+
+function categoryIcon(c) {
+  return ({ 'Здоровье': '❤️', 'Спорт': '🏃', 'Учёба': '📚', 'Духовное': '🕌', 'Работа': '💻', 'Личное': '✨' }[c] || '✨');
+}
+
+function renderProfile() {
+  const total = data.habits.length, completed = data.habits.reduce((s, h) => s + Object.values(h.done || {}).filter(Boolean).length, 0);
+  const bestStreak = total ? Math.max(...data.habits.map(best)) : 0;
+  document.getElementById('profileName').textContent = total ? `Мои привычки · ${total}` : 'Мой прогресс';
+  document.getElementById('profileSubtitle').textContent = completed ? `${completed} выполнений — продолжай в том же духе` : 'Начни с одной привычки';
+  document.getElementById('profileStreak').textContent = bestStreak + ' 🔥';
+  document.getElementById('profileDone').textContent = completed;
+  document.getElementById('profileHabits').textContent = total;
+
+  const cats = ['Здоровье', 'Спорт', 'Учёба', 'Духовное', 'Работа', 'Личное'];
+  document.getElementById('categoryGrid').innerHTML = cats.map(c => {
+    let n = data.habits.filter(h => h.category === c).length;
+    return `<button class="cat-btn" onclick="filterCategory('${c}')"><b>${categoryIcon(c)} ${c}</b><span>${n} ${n === 1 ? 'привычка' : 'привычек'}</span></button>`;
+  }).join('');
+
+  const t = document.getElementById('notifyToggle');
+  t.classList.toggle('on', !!data.settings.notifications);
+  document.getElementById('notifyTime').value = data.settings.time || '20:00';
+  renderAchievements();
+  renderGoal();
+  renderLevel();
+}
+
+function filterCategory(c) {
+  switchView('home', document.querySelector('[data-view=home]'));
+  const hs = data.habits.filter(h => h.category === c);
+  const list = document.getElementById('habitList');
+  list.innerHTML = hs.length ? hs.map(h => `<div class="habit ${done(h) ? 'done' : ''}"><div class="icon">${esc(h.icon || '✨')}</div><div class="info"><div class="name">${esc(h.name)}</div><div class="meta">🔥 ${streak(h)} дней подряд</div><div class="category">${categoryIcon(h.category)} ${esc(h.category)}</div></div><div class="actions"><button class="small edit" onclick="openModal(${h.id})">✎</button><button class="small delete danger" onclick="removeHabit(${h.id})">🗑</button><button class="check" onclick="toggle(${h.id})">${done(h) ? '✓' : '○'}</button></div></div>`).join('') : `<div class="empty">В категории «${esc(c)}» пока нет привычек.</div>`;
+}
+
+async function saveSettings() {
+  data.settings.time = document.getElementById('notifyTime').value;
+  if (data.settings.notifications) {
+    try { await syncPushSettings(); } catch (e) {}
+  }
+  save();
+}
+
+async function toggleNotifications() {
+  if (data.settings.notifications) {
+    data.settings.notifications = false;
+    try {
+      await syncPushSettings();
+    } catch (e) {
+      console.error(e);
+      data.settings.notifications = true;
+      alert('Не удалось отключить уведомления на сервере.');
+      return;
+    }
+    save();
+    return;
+  }
+  if (!('Notification' in window)) {
+    alert('Этот браузер не поддерживает уведомления.');
+    return;
+  }
+  if (!window.HABIT_PUSH_WORKER_URL || window.HABIT_PUSH_WORKER_URL.includes('YOUR-WORKER')) {
+    alert('Укажи корректный адрес Worker в firebase-config.js.');
+    return;
+  }
+  try {
+    const p = await Notification.requestPermission();
+    if (p !== 'granted') {
+      alert('Разрешение на уведомления отклонено.');
+      return;
+    }
+    ensureFirebase();
+    const msg = firebase.messaging();
+    const sw = await navigator.serviceWorker.register('./firebase-messaging-sw.js?v=3');
+    const token = await msg.getToken({ vapidKey: window.HABIT_VAPID_KEY, serviceWorkerRegistration: sw });
+    if (!token) throw new Error('FCM token не получен');
+
+    data.settings.notifications = true;
+    data.settings.fcmToken = token;
+    data.settings.time = data.settings.time || '20:00';
+    data.settings.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+    
+    await syncPushSettings();
+    bindForegroundPushListener();
+    save();
+    alert('Push-уведомления успешно включены!');
+  } catch (e) {
+    console.error(e);
+    data.settings.notifications = false;
+    save();
+    alert('Не удалось подключить push. Проверь консоль браузера.');
+  }
+}
+
+async function syncPushSettings() {
   if (!data.settings.fcmToken) return;
   if (!window.HABIT_PUSH_WORKER_URL || window.HABIT_PUSH_WORKER_URL.includes('YOUR-WORKER')) return;
 
   let idToken = null;
   try {
-    if (typeof firebase !== 'undefined' && firebase.apps.length && firebase.auth().currentUser) {
-      idToken = await firebase.auth().currentUser.getIdToken();
+    const auth = ensureFirebase();
+    if (auth && auth.currentUser) {
+      idToken = await auth.currentUser.getIdToken();
     }
   } catch (e) {
     console.warn("Could not get idToken:", e);
@@ -415,3 +724,59 @@ async function toggleNotifications(){
     token: data.settings.fcmToken,
     enabled: !!data.settings.notifications,
     time: data.settings.time || '20:00',
+    timezone: data.settings.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+    habits: data.habits.map(h => ({
+      id: h.id,
+      name: h.name,
+      icon: h.icon || '✨',
+      frequency: h.frequency || 'daily',
+      weekdays: Array.isArray(h.weekdays) ? h.weekdays : [],
+      reminder: h.reminder || data.settings.time || '20:00',
+      done: { [todayKey()]: !!(h.done && h.done[todayKey()]) }
+    }))
+  };
+
+  try {
+    await fetch(window.HABIT_PUSH_WORKER_URL.replace(/\/$/, '') + '/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch (err) {
+    console.warn("Worker fetch error:", err);
+  }
+}
+
+function exportData() {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'habit-flow-backup.json'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+async function resetAll() {
+  if (!confirm('Точно удалить все привычки и историю?')) return;
+  data = { habits: [], settings: { notifications: false, time: '20:00' } };
+  save();
+}
+
+function renderAll() {
+  renderHome();
+  renderCalendar();
+  renderStats();
+  renderProfile();
+  initTheme();
+}
+
+renderAll();
+try {
+  const auth = ensureFirebase();
+  if (auth) auth.onAuthStateChanged(handleAuthState);
+  if (data.settings.notifications) bindForegroundPushListener();
+} catch (e) {
+  console.error('Firebase initialization failed', e);
+}
+</script>
+</body>
+</html>
