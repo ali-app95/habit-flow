@@ -397,43 +397,21 @@ async function toggleNotifications(){
    save();alert('Push-уведомления включены. Время: '+data.settings.time);
   }catch(e){console.error(e);data.settings.notifications=false;save();alert('Не удалось подключить push. Проверь Firebase Authentication, разрешение уведомлений и настройки Cloudflare Worker. Подробности — в консоли браузера.')}
  }
- async function syncPushSettings(){
-  if(!data.settings.fcmToken) return;
-  if(!window.HABIT_PUSH_WORKER_URL || window.HABIT_PUSH_WORKER_URL.includes('YOUR-WORKER')){
-    throw new Error('Не задан HABIT_PUSH_WORKER_URL');
+ async function syncPushSettings() {
+  if (!data.settings.fcmToken) return;
+  if (!window.HABIT_PUSH_WORKER_URL || window.HABIT_PUSH_WORKER_URL.includes('YOUR-WORKER')) return;
+
+  let idToken = null;
+  try {
+    if (typeof firebase !== 'undefined' && firebase.apps.length && firebase.auth().currentUser) {
+      idToken = await firebase.auth().currentUser.getIdToken();
+    }
+  } catch (e) {
+    console.warn("Could not get idToken:", e);
   }
 
-  const auth = ensureFirebase();
-  // Если пользователь не залогинен, создаем временную анонимную сессию для безопасного токена
-  if (!auth.currentUser) {
-    await auth.signInAnonymously();
-  }
-  const idToken = await auth.currentUser.getIdToken();
-
-  const response = await fetch(window.HABIT_PUSH_WORKER_URL.replace(/\/$/, '') + '/subscribe', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      idToken: idToken,
-      token: data.settings.fcmToken,
-      enabled: !!data.settings.notifications,
-      time: data.settings.time || '20:00',
-      timezone: data.settings.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
-      habits: data.habits.map(h => ({
-        id: h.id,
-        name: h.name,
-        icon: h.icon,
-        frequency: h.frequency || 'daily',
-        weekdays: Array.isArray(h.weekdays) ? h.weekdays : [],
-        // Если у самой привычки не выставлено персональное время, берем общее время уведомлений
-        reminder: h.reminder || data.settings.time || '20:00',
-        done: { [todayKey()]: !!(h.done && h.done[todayKey()]) }
-      }))
-    })
-  });
-
-  if(!response.ok){
-    const detail = await response.text().catch(() => '');
-    throw new Error('Cloudflare Worker HTTP ' + response.status + ' ' + detail);
-  }
-}
+  const payload = {
+    idToken: idToken,
+    token: data.settings.fcmToken,
+    enabled: !!data.settings.notifications,
+    time: data.settings.time || '20:00',
