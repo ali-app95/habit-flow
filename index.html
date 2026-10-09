@@ -167,7 +167,6 @@
     <div class="title-row"><h2>Настройки</h2></div>
     <div class="card">
       <div class="setting"><div><b>Ежедневное напоминание</b><div class="muted">Показывать уведомление о привычках</div></div><button id="notifyToggle" class="toggle" onclick="toggleNotifications()"><i></i></button></div>
-      <div class="setting"><div><b>Время напоминания</b><div class="muted">Когда напоминать</div></div><input id="notifyTime" type="time" value="20:00" style="width:105px;padding:8px" onchange="saveSettings()"></div>
       <div class="setting"><div><b>Экспорт данных</b><div class="muted">Сохранить резервную копию</div></div><button class="small" onclick="exportData()">Скачать</button></div>
     </div>
     <div class="title-row"><h2>Опасная зона</h2></div>
@@ -637,7 +636,6 @@ function renderProfile() {
 
   const t = document.getElementById('notifyToggle');
   t.classList.toggle('on', !!data.settings.notifications);
-  document.getElementById('notifyTime').value = data.settings.time || '20:00';
   renderAchievements();
   renderGoal();
   renderLevel();
