@@ -171,8 +171,9 @@
       </div>
       <div id="accountLoggedIn" style="display:none"><div class="account-actions"><button class="ghost" onclick="logoutAccount()">Выйти</button></div></div>
     </div>
-    <div class="title-row"><h2>Мои цели</h2><span class="muted">настраиваются отдельно</span></div>
-    <div id="habitGoals" class="habit-goals"></div>
+    <details class="achievements-folder goals-folder"><summary><span class="folder-label">🎯 Мои цели</span><span class="muted" id="goalHabitCount">0 привычек</span></summary>
+      <div id="habitGoals" class="habit-goals"></div>
+    </details>
     <div class="title-row"><h2>Категории</h2><span class="muted">организуй привычки</span></div>
     <div class="category-grid" id="categoryGrid"></div>
     <div class="title-row"><h2>Настройки</h2></div>
@@ -450,6 +451,8 @@ function renderAchievements() {
 function renderGoal() {
   const box = document.getElementById('habitGoals');
   if (!box) return;
+  const countLabel = document.getElementById('goalHabitCount');
+  if (countLabel) countLabel.textContent = data.habits.length + ' ' + (data.habits.length === 1 ? 'привычка' : data.habits.length >= 2 && data.habits.length <= 4 ? 'привычки' : 'привычек');
   const now = new Date();
   const monday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
