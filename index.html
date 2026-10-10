@@ -828,14 +828,22 @@ async function syncPushSettings() {
     }))
   };
 
+  let response;
   try {
-    await fetch(window.HABIT_PUSH_WORKER_URL.replace(/\/$/, '') + '/subscribe', {
+    response = await fetch(window.HABIT_PUSH_WORKER_URL.replace(/\/$/, '') + '/subscribe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
   } catch (err) {
-    console.warn("Worker fetch error:", err);
+    console.error("Worker fetch error:", err);
+    throw new Error("Не удалось связаться с сервером напоминаний: " + (err && err.message ? err.message : "ошибка сети"));
+  }
+
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok || result.ok !== true) {
+    console.error("Worker rejected push subscription:", response.status, result);
+    throw new Error("Сервер не сохранил подписку (" + response.status + "): " + (result.error || result.message || "неизвестная ошибка"));
   }
 }
 
