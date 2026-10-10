@@ -214,6 +214,7 @@
 <script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-messaging-compat.js"></script>
 <script src="./firebase-config.js?v=3"></script>
+<script type="module" src="./push-bridge.js"></script>
 <script>
 const KEY = "habit-tracker-v2";
 let data = JSON.parse(localStorage.getItem(KEY) || localStorage.getItem("habit-tracker-v1") || '{"habits":[]}');
@@ -703,6 +704,41 @@ async function saveSettings() {
   save();
 }
 
+async function getNativePushToken() {
+  const PushNotifications = window.HabitPushNotifications;
+  if (!PushNotifications) {
+    throw new Error('Нативный push-плагин не загружен. Пересобери web-файлы через Vite и выполни npx cap sync android.');
+  }
+
+  let registrationListener, errorListener;
+  const tokenPromise = new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => reject(new Error('FCM не вернул токен за 15 секунд')), 15000);
+    PushNotifications.addListener('registration', token => {
+      clearTimeout(timeout);
+      resolve(token && token.value);
+    }).then(handle => { registrationListener = handle; }).catch(reject);
+    PushNotifications.addListener('registrationError', error => {
+      clearTimeout(timeout);
+      reject(new Error(error && (error.error || error.message) || 'Ошибка регистрации FCM'));
+    }).then(handle => { errorListener = handle; }).catch(reject);
+  });
+
+  try {
+    const current = await PushNotifications.checkPermissions();
+    const permission = current.receive === 'granted'
+      ? current
+      : await PushNotifications.requestPermissions();
+    if (permission.receive !== 'granted') throw new Error('Разрешение на уведомления не выдано');
+    await PushNotifications.register();
+    const token = await tokenPromise;
+    if (!token) throw new Error('FCM token не получен');
+    return token;
+  } finally {
+    if (registrationListener) await registrationListener.remove();
+    if (errorListener) await errorListener.remove();
+  }
+}
+
 async function toggleNotifications() {
   if (data.settings.notifications) {
     data.settings.notifications = false;
@@ -717,40 +753,47 @@ async function toggleNotifications() {
     save();
     return;
   }
-  if (!('Notification' in window)) {
-    alert('Этот браузер не поддерживает уведомления.');
-    return;
-  }
   if (!window.HABIT_PUSH_WORKER_URL || window.HABIT_PUSH_WORKER_URL.includes('YOUR-WORKER')) {
     alert('Укажи корректный адрес Worker в firebase-config.js.');
     return;
   }
+  const isNativeAndroid = !!(window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform());
+  if (!isNativeAndroid && !('Notification' in window)) {
+    alert('Этот браузер не поддерживает уведомления.');
+    return;
+  }
   try {
-    const p = await Notification.requestPermission();
-    if (p !== 'granted') {
-      alert('Разрешение на уведомления отклонено.');
-      return;
+    let token;
+    if (isNativeAndroid) {
+      token = await getNativePushToken();
+    } else {
+      const p = await Notification.requestPermission();
+      if (p !== 'granted') {
+        alert('Разрешение на уведомления отклонено.');
+        return;
+      }
+      ensureFirebase();
+      const msg = firebase.messaging();
+      const sw = await navigator.serviceWorker.register('./firebase-messaging-sw.js?v=3');
+      token = await msg.getToken({ vapidKey: window.HABIT_VAPID_KEY, serviceWorkerRegistration: sw });
     }
-    ensureFirebase();
-    const msg = firebase.messaging();
-    const sw = await navigator.serviceWorker.register('./firebase-messaging-sw.js?v=3');
-    const token = await msg.getToken({ vapidKey: window.HABIT_VAPID_KEY, serviceWorkerRegistration: sw });
     if (!token) throw new Error('FCM token не получен');
 
     data.settings.notifications = true;
     data.settings.fcmToken = token;
+    data.settings.pushPlatform = isNativeAndroid ? 'android' : 'web';
     data.settings.time = data.settings.time || '20:00';
     data.settings.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
-    
+
     await syncPushSettings();
-    bindForegroundPushListener();
+    if (!isNativeAndroid) bindForegroundPushListener();
     save();
-    alert('Push-уведомления успешно включены!');
+    alert(isNativeAndroid ? 'Android-уведомления подключены!' : 'Push-уведомления успешно включены!');
   } catch (e) {
     console.error(e);
     data.settings.notifications = false;
     save();
-    alert('Не удалось подключить push. Проверь консоль браузера.');
+    alert('Не удалось подключить push: ' + (e && e.message ? e.message : 'проверь настройки Firebase Android и разрешения.'));
   }
 }
 
